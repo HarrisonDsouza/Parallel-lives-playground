@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CharacterMascot from '../components/CharacterMascot';
 
 // Set default headers for axios
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -236,6 +237,18 @@ export default function TimelineEditor() {
           </div>
         </form>
       </div>
+      
+      {/* Character Mascot */}
+      <CharacterMascot 
+        action={loading ? 'working' : name && choices ? 'encouraging' : 'thinking'}
+        position="top-right"
+        message={
+          loading ? "Creating your amazing timeline story! ✨" :
+          name && choices ? "Great choices! Ready to see your future? 🚀" :
+          "Tell me about your adventure! What will you choose? 🤔"
+        }
+        autoHide={false}
+      />
     </div>
   );
 }
