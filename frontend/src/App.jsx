@@ -7,7 +7,7 @@ export default function App() {
       <header className="header">
         <h1>Parallel Lives Playground</h1>
         <nav>
-          <Link to="/">Home</Link> | <Link to="/playground">Playground</Link> | <Link to="/editor">Create Timeline</Link>
+          <Link to="/">Home</Link> | <Link to="/playground">Playground</Link> | <Link to="/editor">Create Timeline</Link> | <Link to="/goose">🦆 Goose Showcase</Link>
         </nav>
       </header>
       <main className="main">

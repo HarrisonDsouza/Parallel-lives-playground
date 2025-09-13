@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import CharacterMascot from '../components/CharacterMascot';
 
 const API = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api';
 
@@ -213,6 +214,19 @@ export default function Visit() {
         </div>
 
       </div>
+      
+      {/* Character Mascot */}
+      <CharacterMascot 
+        action={simulated.multiplier >= 2.0 ? 'celebrating' : simulated.multiplier >= 1.5 ? 'encouraging' : 'thinking'}
+        position="bottom-left"
+        message={
+          simulated.multiplier >= 2.5 ? "WOW! This timeline is absolutely amazing! 🌟" :
+          simulated.multiplier >= 2.0 ? "Fantastic choices! You're doing great! 🎉" :
+          simulated.multiplier >= 1.5 ? "Good job! Want to try different choices next time? 😊" :
+          "Every choice teaches us something valuable! 💪"
+        }
+        duration={5000}
+      />
     </div>
   );
 }
