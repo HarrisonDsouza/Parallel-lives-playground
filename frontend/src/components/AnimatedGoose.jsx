@@ -1,8 +1,23 @@
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+// AnimatedGoose.jsx
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
-export default function AnimatedGoose({ action = 'idle', size = 120 }) {
-  // More natural animation variants for a real goose
+/**
+ * Updated AnimatedGoose component — visuals changed to resemble a Canada goose:
+ * - Black head & neck with a white cheek patch
+ * - Brown/gray body with lighter chest area
+ * - Black beak & black webbed feet
+ * - Longer neck and less "ducky" rounded head
+ *
+ * Kept your original animation variants and interactive visual elements
+ * (thought bubble, honk waves, sparkles, confused/question marks, etc.)
+ *
+ * Props:
+ * - action: animation/action name (e.g. 'idle', 'honking', 'celebrating', etc.)
+ * - size: px size for the SVG container (default 120)
+ */
+export default function AnimatedGoose({ action = "idle", size = 140 }) {
+  // Keep the animation variants you already had (kept same names & behavior)
   const animations = {
     idle: {
       body: { y: [0, -2, 0], rotate: [0, 0.5, 0] },
@@ -11,9 +26,9 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -5, 0] },
       rightWing: { rotate: [0, 5, 0] },
       tail: { rotate: [0, 2, -2, 0] },
-      transition: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 4, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     waving: {
       body: { y: [0, -3, 0] },
       head: { rotate: [0, 8, 0] },
@@ -21,9 +36,9 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -30, -15, -30, 0] },
       rightWing: { rotate: [0, 8, 0] },
       tail: { rotate: [0, 5, 0] },
-      transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     celebrating: {
       body: { y: [0, -8, -2, -8, 0], scale: [1, 1.05, 1] },
       head: { rotate: [0, 12, -12, 0] },
@@ -31,9 +46,9 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -45, -20, -45, 0] },
       rightWing: { rotate: [0, 45, 20, 45, 0] },
       tail: { rotate: [0, 8, -8, 0] },
-      transition: { duration: 0.8, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 0.8, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     thinking: {
       body: { y: [0, -1, 0] },
       head: { rotate: [0, -15, -12, -15, 0] },
@@ -41,9 +56,9 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -8, 0] },
       rightWing: { rotate: [0, 8, 0] },
       tail: { rotate: [0, -3, 3, 0] },
-      transition: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     working: {
       body: { y: [0, -2, 0], rotate: [0, -1, 1, 0] },
       head: { rotate: [0, -8, 8, 0] },
@@ -51,29 +66,29 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -25, -10, -25, 0] },
       rightWing: { rotate: [0, 25, 10, 25, 0] },
       tail: { rotate: [0, 3, -3, 0] },
-      transition: { duration: 0.6, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 0.6, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     encouraging: {
       body: { y: [0, -4, 0] },
       head: { rotate: [0, 10, 0] },
       neck: { rotate: [0, 6, 0] },
-      leftWing: { rotate: [0, -35, 0] }, // Thumbs up gesture
+      leftWing: { rotate: [0, -35, 0] },
       rightWing: { rotate: [0, 8, 0] },
       tail: { rotate: [0, 5, 0] },
-      transition: { duration: 1, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 1, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     pointing: {
       body: { y: [0, -2, 0] },
       head: { rotate: [0, 12, 0] },
       neck: { rotate: [0, 8, 0] },
       leftWing: { rotate: [0, 5, 0] },
-      rightWing: { rotate: [0, -25, -30, -25, 0] }, // Pointing gesture
+      rightWing: { rotate: [0, -25, -30, -25, 0] },
       tail: { rotate: [0, 3, 0] },
-      transition: { duration: 1.3, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 1.3, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     oops: {
       body: { y: [0, -1, 0], rotate: [0, -3, 0] },
       head: { rotate: [0, -25, -20, -25, 0] },
@@ -81,9 +96,9 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -15, 0] },
       rightWing: { rotate: [0, 10, 0] },
       tail: { rotate: [0, -5, 0] },
-      transition: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
     },
-    
+
     honking: {
       body: { y: [0, -6, -2, -6, 0], scale: [1, 1.03, 1] },
       head: { rotate: [0, 20, 15, 20, 0] },
@@ -91,17 +106,21 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -15, 0] },
       rightWing: { rotate: [0, 15, 0] },
       tail: { rotate: [0, 8, 0] },
-      transition: { duration: 0.5, repeat: Infinity, ease: "easeOut" }
+      transition: { duration: 0.5, repeat: Infinity, ease: "easeOut" },
     },
 
     super_celebrating: {
-      body: { y: [0, -12, -3, -12, 0], scale: [1, 1.1, 1.05, 1.1, 1], rotate: [0, 3, -3, 0] },
+      body: {
+        y: [0, -12, -3, -12, 0],
+        scale: [1, 1.1, 1.05, 1.1, 1],
+        rotate: [0, 3, -3, 0],
+      },
       head: { rotate: [0, 15, -15, 12, -12, 0] },
       neck: { rotate: [0, 10, -10, 8, -8, 0] },
       leftWing: { rotate: [0, -60, -30, -60, 0] },
       rightWing: { rotate: [0, 60, 30, 60, 0] },
       tail: { rotate: [0, 10, -10, 0] },
-      transition: { duration: 0.6, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 0.6, repeat: Infinity, ease: "easeInOut" },
     },
 
     confused: {
@@ -111,90 +130,91 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
       leftWing: { rotate: [0, -12, 0] },
       rightWing: { rotate: [0, 12, 0] },
       tail: { rotate: [0, -3, 3, 0] },
-      transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
+      transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
     },
 
     amazed: {
       body: { y: [0, -4, 0], scale: [1, 1.08, 1] },
-      head: { rotate: [0, 2, -2, 0] }, // Keep head mostly straight for amazed look
+      head: { rotate: [0, 2, -2, 0] },
       neck: { rotate: [0, 1, -1, 0] },
       leftWing: { rotate: [0, -20, 0] },
       rightWing: { rotate: [0, 20, 0] },
       tail: { rotate: [0, 5, 0] },
-      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
-    }
+      transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" },
+    },
   };
 
   const currentAnimation = animations[action] || animations.idle;
+  const showSparkles = [
+    "celebrating",
+    "super_celebrating",
+    "encouraging",
+    "honking",
+    "amazed",
+  ].includes(action);
 
-  // Sparkle effects for magical actions
-  const showSparkles = ['celebrating', 'super_celebrating', 'encouraging', 'honking', 'amazed'].includes(action);
+  // scale helpers
+  const svgSize = Number(size) || 140;
+  const sparkleSize = Math.max(6, Math.round(svgSize * 0.06));
 
   return (
-    <div style={{ 
-      width: size, 
-      height: size, 
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
-      {/* Sparkles for celebration */}
-      {showSparkles && (
-        <>
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              style={{
-                position: 'absolute',
-                width: 8,
-                height: 8,
-                background: '#FFD700',
-                borderRadius: '50%',
-                top: `${20 + Math.random() * 60}%`,
-                left: `${20 + Math.random() * 60}%`,
-              }}
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0],
-                rotate: 360
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: "easeInOut"
-              }}
-            />
-          ))}
-        </>
-      )}
+    <div
+      style={{
+        width: svgSize,
+        height: svgSize,
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* Sparkles (for certain actions) */}
+      {showSparkles &&
+        [...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            style={{
+              position: "absolute",
+              width: sparkleSize,
+              height: sparkleSize,
+              background: "#FFD700",
+              borderRadius: "50%",
+              top: `${18 + Math.random() * 60}%`,
+              left: `${18 + Math.random() * 60}%`,
+              boxShadow: "0 0 8px rgba(255,200,0,0.8)",
+            }}
+            animate={{
+              scale: [0, 1, 0],
+              opacity: [0, 1, 0],
+              rotate: 360,
+            }}
+            transition={{
+              duration: 1.4,
+              repeat: Infinity,
+              delay: i * 0.18,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
 
-      {/* Main Goose SVG - More Realistic Design */}
+      {/* Main SVG */}
       <motion.svg
-        width={size}
-        height={size}
+        width={svgSize}
+        height={svgSize}
         viewBox="0 0 200 200"
-        style={{ overflow: 'visible' }}
+        style={{ overflow: "visible" }}
         animate={currentAnimation.body}
         transition={currentAnimation.transition}
       >
-        {/* Drop shadow and gradients */}
         <defs>
           <filter id="dropshadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="2" dy="4" stdDeviation="3" floodOpacity="0.3"/>
+            <feDropShadow dx="2" dy="4" stdDeviation="3" floodOpacity="0.25" />
           </filter>
-          <radialGradient id="bodyGradient" cx="0.3" cy="0.3">
-            <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="100%" stopColor="#F5F5F5" />
-          </radialGradient>
-          <radialGradient id="headGradient" cx="0.3" cy="0.3">
-            <stop offset="0%" stopColor="#FFFFFF" />
-            <stop offset="100%" stopColor="#F8F8F8" />
-          </radialGradient>
         </defs>
 
-        {/* Goose Body (realistic pear shape) */}
+        {/* ---------------------------
+            BODY (brown/gray) and CHEST (lighter)
+            --------------------------- */}
         <motion.path
           d="M 100 85 
              C 125 88, 140 100, 145 125
@@ -203,13 +223,25 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
              C 75 185, 65 180, 60 170
              C 55 160, 53 145, 55 125
              C 60 100, 75 88, 100 85 Z"
-          fill="url(#bodyGradient)"
-          stroke="#E0E0E0"
-          strokeWidth="2"
+          fill="#8B6E57" /* warm brown body */
+          stroke="#6B4F3E"
+          strokeWidth="1.8"
           filter="url(#dropshadow)"
         />
 
-        {/* Tail feathers */}
+        {/* lighter chest to read as underside */}
+        <path
+          d="M 100 100
+             C 120 105, 125 120, 120 135
+             C 115 150, 100 160, 85 150
+             C 70 140, 75 120, 100 100 Z"
+          fill="#D9D3C3"
+          opacity="0.95"
+        />
+
+        {/* ---------------------------
+            TAIL FEATHERS (back) - subtle, animated
+            --------------------------- */}
         <motion.g
           animate={currentAnimation.tail}
           transition={currentAnimation.transition}
@@ -217,82 +249,87 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
         >
           <path
             d="M 140 165 C 150 160, 160 162, 165 170 C 163 175, 155 178, 145 175 Z"
-            fill="#F0F0F0"
-            stroke="#E0E0E0"
-            strokeWidth="1.5"
+            fill="#6F5A48"
+            stroke="#5C4638"
+            strokeWidth="0.8"
           />
           <path
             d="M 143 168 C 153 163, 163 165, 168 173 C 166 178, 158 181, 148 178 Z"
-            fill="#F5F5F5"
-            stroke="#E0E0E0"
-            strokeWidth="1"
+            fill="#8A6F5B"
+            stroke="#6B4F3E"
+            strokeWidth="0.6"
           />
         </motion.g>
 
-        {/* Neck (connects head to body naturally) */}
+        {/* ---------------------------
+            NECK - LONG and BLACK (Canada goose)
+            --------------------------- */}
         <motion.path
-          d="M 100 85 
-             C 98 78, 97 70, 96 62
-             C 95 55, 96 50, 98 47
-             C 100 44, 103 42, 106 44
-             C 108 46, 109 50, 108 55
-             C 107 62, 105 70, 103 78
-             C 102 82, 101 84, 100 85 Z"
-          fill="url(#headGradient)"
-          stroke="#E0E0E0"
-          strokeWidth="1.5"
+          d="M 100 85
+             C 99 70, 98 60, 98 50
+             C 98 40, 100 34, 104 32
+             C 109 30, 112 34, 113 41
+             C 114 52, 111 64, 106 74
+             C 104 79, 102 83, 100 85 Z"
+          fill="#000000"
+          stroke="#111111"
+          strokeWidth="0.8"
           animate={currentAnimation.neck}
           transition={currentAnimation.transition}
-          style={{ transformOrigin: "102px 65px" }}
+          style={{ transformOrigin: "102px 60px" }}
         />
 
-        {/* Head (proper goose head shape) */}
+        {/* ---------------------------
+            HEAD - BLACK with WHITE CHEEK PATCH
+            --------------------------- */}
         <motion.g
           animate={currentAnimation.head}
           transition={currentAnimation.transition}
-          style={{ transformOrigin: "102px 55px" }}
+          style={{ transformOrigin: "103px 44px" }}
         >
-          {/* Main head shape - more elongated like real goose */}
+          {/* main head */}
           <ellipse
-            cx="102"
-            cy="55"
-            rx="20"
-            ry="16"
-            fill="url(#headGradient)"
-            stroke="#E0E0E0"
-            strokeWidth="2"
-            filter="url(#dropshadow)"
+            cx="103"
+            cy="42"
+            rx="16"
+            ry="14"
+            fill="#000000"
+            stroke="#111111"
+            strokeWidth="0.9"
           />
-          
-          {/* Beak (realistic goose beak) */}
+
+          {/* white cheek patch - angled, distinctive Canada goose mark */}
           <path
-            d="M 82 55 
-               C 72 53, 65 55, 60 57
-               C 57 58, 57 60, 60 61
-               C 65 63, 72 65, 82 63 Z"
-            fill="#FF8C00"
-            stroke="#E6650A"
-            strokeWidth="1.5"
+            d="M 112 38
+               C 118 36, 122 44, 112 48
+               C 110 49, 107 48, 105 46
+               C 104 44, 104 41, 105 39 Z"
+            fill="#FFFFFF"
           />
-          
-          {/* Nostrils */}
-          <ellipse cx="66" cy="57" rx="1" ry="0.5" fill="#CC6600" />
-          <ellipse cx="66" cy="61" rx="1" ry="0.5" fill="#CC6600" />
-          
-          {/* Eyes (realistic goose eyes) */}
-          <ellipse cx="90" cy="50" rx="3.5" ry="4.5" fill="#000000" />
-          <ellipse cx="114" cy="50" rx="3.5" ry="4.5" fill="#000000" />
-          <ellipse cx="91" cy="48" rx="1.3" ry="1.8" fill="#FFFFFF" />
-          <ellipse cx="113" cy="48" rx="1.3" ry="1.8" fill="#FFFFFF" />
-          <circle cx="91.5" cy="49" r="0.5" fill="#FFFFFF" />
-          <circle cx="113.5" cy="49" r="0.5" fill="#FFFFFF" />
+
+          {/* eye - small white highlight then pupil */}
+          <ellipse cx="96" cy="40" rx="3" ry="3.7" fill="#FFFFFF" />
+          <circle cx="96" cy="40" r="1.3" fill="#000000" />
+
+          {/* beak - black, shorter and triangular for goose */}
+          <path
+            d="M 88 44 
+               C 82 42, 78 44, 88 46
+               C 90 46, 92 46, 94 45
+               C 92 44, 90 44, 88 44 Z"
+            fill="#111111"
+            stroke="#222222"
+            strokeWidth="0.6"
+          />
         </motion.g>
 
-        {/* Left Wing (proper wing shape and connection) */}
+        {/* ---------------------------
+            LEFT WING (subtle feathers)
+            --------------------------- */}
         <motion.g
           animate={currentAnimation.leftWing}
           transition={currentAnimation.transition}
-          style={{ transformOrigin: "75px 115px" }}
+          style={{ transformOrigin: "70px 115px" }}
         >
           <path
             d="M 78 105
@@ -300,21 +337,22 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
                C 45 135, 48 145, 58 150
                C 68 153, 78 150, 83 140
                C 85 130, 83 120, 78 105 Z"
-            fill="#F8F8F8"
-            stroke="#E0E0E0"
-            strokeWidth="2"
+            fill="#7F6958"
+            stroke="#5E4A3A"
+            strokeWidth="1"
           />
-          {/* Wing feather details */}
-          <path d="M 58 120 C 53 125, 53 135, 58 140" fill="none" stroke="#D0D0D0" strokeWidth="1" />
-          <path d="M 63 117 C 58 122, 58 132, 63 137" fill="none" stroke="#D0D0D0" strokeWidth="1" />
-          <path d="M 68 115 C 63 120, 63 130, 68 135" fill="none" stroke="#D0D0D0" strokeWidth="1" />
+          <path d="M 58 120 C 53 125, 53 135, 58 140" fill="none" stroke="#6B5547" strokeWidth="0.6" />
+          <path d="M 63 117 C 58 122, 58 132, 63 137" fill="none" stroke="#6B5547" strokeWidth="0.6" />
+          <path d="M 68 115 C 63 120, 63 130, 68 135" fill="none" stroke="#6B5547" strokeWidth="0.6" />
         </motion.g>
 
-        {/* Right Wing (proper wing shape and connection) */}
+        {/* ---------------------------
+            RIGHT WING
+            --------------------------- */}
         <motion.g
           animate={currentAnimation.rightWing}
           transition={currentAnimation.transition}
-          style={{ transformOrigin: "125px 115px" }}
+          style={{ transformOrigin: "130px 115px" }}
         >
           <path
             d="M 122 105
@@ -322,130 +360,107 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
                C 155 135, 152 145, 142 150
                C 132 153, 122 150, 117 140
                C 115 130, 117 120, 122 105 Z"
-            fill="#F8F8F8"
-            stroke="#E0E0E0"
-            strokeWidth="2"
+            fill="#7F6958"
+            stroke="#5E4A3A"
+            strokeWidth="1"
           />
-          {/* Wing feather details */}
-          <path d="M 142 120 C 147 125, 147 135, 142 140" fill="none" stroke="#D0D0D0" strokeWidth="1" />
-          <path d="M 137 117 C 142 122, 142 132, 137 137" fill="none" stroke="#D0D0D0" strokeWidth="1" />
-          <path d="M 132 115 C 137 120, 137 130, 132 135" fill="none" stroke="#D0D0D0" strokeWidth="1" />
+          <path d="M 142 120 C 147 125, 147 135, 142 140" fill="none" stroke="#6B5547" strokeWidth="0.6" />
+          <path d="M 137 117 C 142 122, 142 132, 137 137" fill="none" stroke="#6B5547" strokeWidth="0.6" />
+          <path d="M 132 115 C 137 120, 137 130, 132 135" fill="none" stroke="#6B5547" strokeWidth="0.6" />
         </motion.g>
 
-        {/* Webbed Feet (more realistic) */}
+        {/* ---------------------------
+            FEET - black webbed (animated slightly)
+            --------------------------- */}
         <motion.g
-          animate={{ 
-            y: currentAnimation.body.y ? currentAnimation.body.y.map(val => val * 0.1) : [0]
+          animate={{
+            y: currentAnimation.body && currentAnimation.body.y ? currentAnimation.body.y.map((v) => v * 0.08) : [0],
           }}
           transition={currentAnimation.transition}
         >
-          {/* Left foot */}
           <path
-            d="M 85 185 
-               C 82 187, 79 190, 77 193
-               L 75 195 L 79 197 L 83 195
-               L 87 197 L 91 195 L 89 193
-               C 87 190, 85 187, 85 185 Z"
-            fill="#FF8C00"
-            stroke="#E6650A"
-            strokeWidth="1"
+            d="M 84 168 C 82 170, 79 173, 77 176 L 75 178 L 79 180 L 83 178 L 87 180 L 91 178 L 89 176 C 87 173 85 170 84 168 Z"
+            fill="#111111"
+            stroke="#000000"
+            strokeWidth="0.6"
           />
-          {/* Right foot */}
           <path
-            d="M 115 185 
-               C 118 187, 121 190, 123 193
-               L 125 195 L 121 197 L 117 195
-               L 113 197 L 109 195 L 111 193
-               C 113 190, 115 187, 115 185 Z"
-            fill="#FF8C00"
-            stroke="#E6650A"
-            strokeWidth="1"
+            d="M 116 168 C 118 170, 121 173, 123 176 L 125 178 L 121 180 L 117 178 L 113 180 L 109 178 L 111 176 C 113 173 115 170 116 168 Z"
+            fill="#111111"
+            stroke="#000000"
+            strokeWidth="0.6"
           />
         </motion.g>
 
-        {/* Small bow tie (subtle, natural placement) */}
-        <polygon
-          points="96,80 104,80 100,75 96,80"
-          fill="#FF6B6B"
-          opacity="0.8"
-        />
-        <polygon
-          points="96,80 104,80 100,85 96,80"
-          fill="#FF6B6B"
-          opacity="0.8"
-        />
-        <rect x="98.5" y="78.5" width="3" height="3" fill="#FF4757" opacity="0.9" />
+        {/* ---------------------------
+            Small accessories (optional) - bow tie was making ducky look silly,
+            so keep it subtle and smaller. */}
+        <g>
+          <rect x="98.5" y="78.5" width="3" height="3" fill="#8B1A1A" opacity="0.9" />
+        </g>
 
-        {/* Thought bubble for thinking action */}
-        {action === 'thinking' && (
-          <motion.g
-            animate={{ opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
+        {/* ---------------------------
+            Thought bubble for thinking
+            --------------------------- */}
+        {action === "thinking" && (
+          <motion.g animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 3, repeat: Infinity }}>
             <circle cx="145" cy="45" r="12" fill="#FFFFFF" stroke="#DDD" strokeWidth="2" />
             <circle cx="135" cy="55" r="6" fill="#FFFFFF" stroke="#DDD" strokeWidth="2" />
             <circle cx="130" cy="60" r="3" fill="#FFFFFF" stroke="#DDD" strokeWidth="2" />
-            <text x="145" y="50" textAnchor="middle" fontSize="16" fill="#333">?</text>
+            <text x="145" y="50" textAnchor="middle" fontSize="12" fill="#333">
+              ?
+            </text>
           </motion.g>
         )}
 
-        {/* Exclamation for celebrating */}
-        {(action === 'celebrating' || action === 'super_celebrating') && (
+        {/* ---------------------------
+            Celebrate / Exclamation
+            --------------------------- */}
+        {(action === "celebrating" || action === "super_celebrating") && (
           <motion.g
-            animate={{ 
-              scale: [0, 1.2, 1],
-              rotate: [0, 10, -10, 0] 
-            }}
-            transition={{ duration: action === 'super_celebrating' ? 0.6 : 1, repeat: Infinity }}
+            animate={{ scale: [0, 1.2, 1], rotate: [0, 10, -10, 0] }}
+            transition={{ duration: action === "super_celebrating" ? 0.6 : 1, repeat: Infinity }}
           >
             <circle cx="145" cy="40" r="15" fill="#FFD700" stroke="#FFA500" strokeWidth="3" />
-            <text x="145" y="47" textAnchor="middle" fontSize="20" fill="#FFF">!</text>
+            <text x="145" y="47" textAnchor="middle" fontSize="18" fill="#FFF">
+              !
+            </text>
           </motion.g>
         )}
 
-        {/* Question marks for confused */}
-        {action === 'confused' && (
+        {/* ---------------------------
+            Confused question marks
+            --------------------------- */}
+        {action === "confused" && (
           <motion.g>
             {[1, 2, 3].map((i) => (
               <motion.g
                 key={i}
-                animate={{ 
-                  y: [0, -10, 0],
-                  opacity: [0, 1, 0],
-                  scale: [0.5, 1, 0.5]
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  delay: i * 0.3 
-                }}
+                animate={{ y: [0, -10, 0], opacity: [0, 1, 0], scale: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.28 }}
               >
                 <circle cx={130 + i * 15} cy={35 + i * 5} r="8" fill="#FFB6C1" stroke="#FF69B4" strokeWidth="2" />
-                <text x={130 + i * 15} y={41 + i * 5} textAnchor="middle" fontSize="12" fill="#333">?</text>
+                <text x={130 + i * 15} y={41 + i * 5} textAnchor="middle" fontSize="12" fill="#333">
+                  ?
+                </text>
               </motion.g>
             ))}
           </motion.g>
         )}
 
-        {/* Stars for amazed */}
-        {action === 'amazed' && (
+        {/* ---------------------------
+            Amazed stars
+            --------------------------- */}
+        {action === "amazed" && (
           <motion.g>
             {[1, 2].map((i) => (
               <motion.g
                 key={i}
-                animate={{ 
-                  scale: [0, 1.5, 1],
-                  rotate: [0, 180, 360],
-                  opacity: [0, 1, 1, 0]
-                }}
-                transition={{ 
-                  duration: 1.5, 
-                  repeat: Infinity, 
-                  delay: i * 0.3 
-                }}
+                animate={{ scale: [0, 1.5, 1], rotate: [0, 180, 360], opacity: [0, 1, 1, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.32 }}
               >
                 <polygon
-                  points={`${140 + i*20},${35 + i*5} ${142 + i*20},${42 + i*5} ${149 + i*20},${42 + i*5} ${144 + i*20},${47 + i*5} ${146 + i*20},${54 + i*5} ${140 + i*20},${50 + i*5} ${134 + i*20},${54 + i*5} ${136 + i*20},${47 + i*5} ${131 + i*20},${42 + i*5} ${138 + i*20},${42 + i*5}`}
+                  points={`${140 + i * 20},${35 + i * 5} ${142 + i * 20},${42 + i * 5} ${149 + i * 20},${42 + i * 5} ${144 + i * 20},${47 + i * 5} ${146 + i * 20},${54 + i * 5} ${140 + i * 20},${50 + i * 5} ${134 + i * 20},${54 + i * 5} ${136 + i * 20},${47 + i * 5} ${131 + i * 20},${42 + i * 5} ${138 + i * 20},${42 + i * 5}`}
                   fill="#FFD700"
                   stroke="#FFA500"
                   strokeWidth="1"
@@ -455,26 +470,21 @@ export default function AnimatedGoose({ action = 'idle', size = 120 }) {
           </motion.g>
         )}
 
-        {/* Sound waves for honking */}
-        {action === 'honking' && (
+        {/* ---------------------------
+            Honk sound waves (for 'honking')
+            --------------------------- */}
+        {action === "honking" && (
           <motion.g>
             {[1, 2, 3].map((i) => (
               <motion.path
                 key={i}
-                d={`M 60 55 Q ${50 - i*5} ${50 + i*3} ${40 - i*8} ${55 + i*5}`}
+                d={`M 60 55 Q ${50 - i * 5} ${50 + i * 3} ${40 - i * 8} ${55 + i * 5}`}
                 fill="none"
                 stroke="#4ECDC4"
                 strokeWidth="2"
                 strokeLinecap="round"
-                animate={{
-                  opacity: [0, 1, 0],
-                  pathLength: [0, 1]
-                }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  delay: i * 0.1
-                }}
+                animate={{ opacity: [0, 1, 0], pathLength: [0, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.1 }}
               />
             ))}
           </motion.g>
