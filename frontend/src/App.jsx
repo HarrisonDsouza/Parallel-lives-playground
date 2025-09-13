@@ -1,9 +1,11 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
+import MinecraftBackground from './components/MinecraftBackground';
 
 export default function App() {
   return (
     <div className="container">
+      <MinecraftBackground />
       <header className="header">
         <h1>Parallel Lives Playground</h1>
         <nav>
