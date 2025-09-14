@@ -143,7 +143,7 @@ Response format:
             client_data = {
                 'name': name,
                 'email': email,
-                'cashAmount': cash_amount,
+                'cash': cash_amount,  # API expects "cash" not "cashAmount"
                 'portfolios': portfolios,
                 **generated_data
             }
@@ -174,7 +174,7 @@ def generate_mock_client_data(user_data):
     return {
         'name': name,
         'email': email,
-        'cashAmount': cash_amount,
+        'cash': cash_amount,  # API expects "cash" not "cashAmount"
         'portfolios': portfolios,
         'age': random.randint(25, 65),
         'phone': f"+1-555-{random.randint(100, 999)}-{random.randint(1000, 9999)}",

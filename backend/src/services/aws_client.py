@@ -6,7 +6,7 @@ import requests
 import json
 import os
 
-AWS_API_ENDPOINT = "https://2dcq63co40.execute-api.us-east-1.amazonaws.com/dev/client/register"
+AWS_API_ENDPOINT = "https://2dcq63co40.execute-api.us-east-1.amazonaws.com/dev/clients"
 
 def register_client_with_aws(client_data):
     """
@@ -39,6 +39,14 @@ def register_client_with_aws(client_data):
             'Authorization': f'Bearer {jwt_token}'
         }
         
+        print(f"=== AWS API REQUEST DEBUG ===")
+        print(f"URL: {AWS_API_ENDPOINT}")
+        print(f"Headers: {headers}")
+        print(f"JWT Token length: {len(jwt_token)}")
+        print(f"JWT Token first 50 chars: {jwt_token[:50]}...")
+        print(f"Payload: {json.dumps(client_data, indent=2)}")
+        print(f"=== END DEBUG ===")
+        
         response = requests.post(
             AWS_API_ENDPOINT,
             json=client_data,
@@ -47,6 +55,7 @@ def register_client_with_aws(client_data):
         )
         
         print(f"AWS API Response Status: {response.status_code}")
+        print(f"Response Headers: {dict(response.headers)}")
         
         if response.status_code == 200 or response.status_code == 201:
             try:
@@ -58,20 +67,24 @@ def register_client_with_aws(client_data):
                     'status_code': response.status_code
                 }
             except json.JSONDecodeError:
+                print(f"Success response but no JSON: {response.text}")
                 return {
                     'success': True,
                     'data': {'message': 'Registration successful'},
                     'status_code': response.status_code
                 }
         else:
+            print(f"Error response body: {response.text}")
             error_message = f"AWS API Error: {response.status_code}"
             try:
                 error_data = response.json()
-                error_message = error_data.get('message', error_message)
+                error_message = error_data.get('message', error_data)
+                print(f"Parsed error data: {error_data}")
             except json.JSONDecodeError:
                 error_message = response.text or error_message
+                print(f"Could not parse error as JSON, using raw text")
                 
-            print(f"AWS API Error: {error_message}")
+            print(f"Final error message: {error_message}")
             return {
                 'success': False,
                 'error': error_message,
