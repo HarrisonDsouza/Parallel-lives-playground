@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function TimelineCard({ timeline, onSpawnLocal }) {
+export default function TimelineCard({ timeline }) {
   const { id, name, owner, simulated } = timeline;
   
   // Convert multiplier to kid-friendly success level
@@ -115,9 +115,9 @@ export default function TimelineCard({ timeline, onSpawnLocal }) {
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8}}>
-        <Link to={`/visit/${id}`} style={{textDecoration: 'none'}}>
+      {/* Action Button */}
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <Link to={`/visit/${id}`} style={{textDecoration: 'none', width: '100%'}}>
           <button style={{
             width: '100%',
             background: 'linear-gradient(45deg, #667eea, #764ba2)',
@@ -141,30 +141,6 @@ export default function TimelineCard({ timeline, onSpawnLocal }) {
             🔍 Visit World
           </button>
         </Link>
-        
-        <button 
-          onClick={() => onSpawnLocal(timeline)}
-          style={{
-            background: 'linear-gradient(45deg, #4ecdc4, #44a08d)',
-            color: 'white',
-            border: 'none',
-            padding: '12px',
-            borderRadius: 10,
-            fontSize: '0.9em',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            transition: 'all 0.3s'
-          }}
-          onMouseEnter={e => {
-            e.target.style.background = 'linear-gradient(45deg, #45b7aa, #3d8b7a)';
-            e.target.style.transform = 'translateY(-1px)';
-          }}
-          onMouseLeave={e => {
-            e.target.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
-            e.target.style.transform = 'translateY(0px)';
-          }}>
-          ✨ Copy Story
-        </button>
       </div>
 
       {/* Fun Fact */}

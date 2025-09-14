@@ -21,7 +21,7 @@ export default function TimelineEditor() {
 	const [choices, setChoices] = useState("");
 	const [profileText, setProfileText] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [useRegistration, setUseRegistration] = useState(false);
+	const [useRegistration, setUseRegistration] = useState(true);
 	const nav = useNavigate();
 
 	async function createTimeline(e) {

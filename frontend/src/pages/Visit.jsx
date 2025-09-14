@@ -19,6 +19,7 @@ export default function Visit() {
 	}, [id]);
 
 	if (!timeline) return <div>Loading timeline...</div>;
+	if (!timeline.simulated) return <div>Timeline data incomplete...</div>;
 
 	const { name, owner, choices, simulated, analysis } = timeline;
 
@@ -60,14 +61,14 @@ export default function Visit() {
 		};
 	};
 
-	const success = getSuccessLevel(simulated.multiplier);
+	const success = getSuccessLevel(simulated?.multiplier ?? 1);
 	const moneyBars = Math.max(
 		1,
-		Math.min(10, Math.round(simulated.multiplier * 3))
+		Math.min(10, Math.round((simulated?.multiplier ?? 1) * 3))
 	);
 	const happinessBars = Math.max(
 		1,
-		Math.min(10, Math.round(simulated.emotional * 10))
+		Math.min(10, Math.round((simulated?.emotional ?? 0) * 10))
 	);
 
 	return (
@@ -545,7 +546,7 @@ export default function Visit() {
 								}}
 							>
 								Family Impact Score:{" "}
-								{(simulated.multiplier * 10).toFixed(0)}/30
+								{((simulated?.multiplier ?? 1) * 10).toFixed(0)}/30
 							</div>
 							<p
 								style={{
@@ -553,9 +554,9 @@ export default function Visit() {
 									fontSize: "0.95em",
 								}}
 							>
-								{simulated.multiplier >= 2.0
+								{(simulated?.multiplier ?? 1) >= 2.0
 									? "🎯 Excellent! These habits support major goals like college savings."
-									: simulated.multiplier >= 1.5
+									: (simulated?.multiplier ?? 1) >= 1.5
 									? "👍 Good foundation! Consider discussing long-term financial planning."
 									: "💡 Great learning opportunity! Talk about balancing fun spending with saving for big dreams."}
 							</p>
@@ -586,9 +587,9 @@ export default function Visit() {
 						Fun Fact!
 					</h3>
 					<p style={{ margin: 0, fontSize: "1.1em" }}>
-						{simulated.multiplier >= 2.0
+						{(simulated?.multiplier ?? 1) >= 2.0
 							? "If you kept making choices like these for 10 years, you could probably buy your own car!"
-							: simulated.multiplier >= 1.5
+							: (simulated?.multiplier ?? 1) >= 1.5
 							? "Choices like these could help you save enough for that expensive gaming setup!"
 							: "Every choice is a learning experience - even tough ones teach us something valuable!"}
 					</p>

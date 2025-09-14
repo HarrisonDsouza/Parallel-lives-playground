@@ -163,7 +163,7 @@ export default function CharacterMascot({
 	const addPopupMessage = () => {
 		const randomMessage =
 			funMessages[Math.floor(Math.random() * funMessages.length)];
-		const id = Date.now();
+		const id = Date.now() + Math.random();
 		setPopupMessages((prev) => [...prev, { id, text: randomMessage }]);
 
 		// Remove popup after 2 seconds
@@ -172,38 +172,18 @@ export default function CharacterMascot({
 		}, 2000);
 	};
 
-	// Enhanced visibility logic with interactive behaviors
+	// Enhanced visibility logic - consistent message per page
 	useEffect(() => {
 		if (action !== "hidden") {
 			const direction = getEntranceDirection();
 			setEntranceDirection(direction);
 			console.log(`🦆 Goose entering from: ${direction}`); // Debug log
 			setIsVisible(true);
-			setCurrentMessage(message);
+			setCurrentMessage(message); // Set the message once and keep it consistent
 
-			// Fun interactive behaviors for kids
-			const randomInteraction = Math.random();
-			
-			// 30% chance for popup messages
-			if (randomInteraction > 0.7) {
-				setTimeout(addPopupMessage, 1500);
-			}
-			
-			// 20% chance for sneaky peek behavior
-			if (randomInteraction > 0.8) {
-				setTimeout(() => {
-					// Temporarily change to peeking, then back to normal
-					setCurrentMessage("👀 Peeking at you!");
-					setTimeout(() => setCurrentMessage(message), 2000);
-				}, 3000);
-			}
-			
-			// 10% chance for hide and seek behavior
-			if (randomInteraction > 0.9) {
-				setTimeout(() => {
-					setCurrentMessage("🙈 Playing hide and seek!");
-					// Add hiding animation here
-				}, 4000);
+			// Only add popup messages occasionally, but don't change main message
+			if (Math.random() > 0.8) {
+				setTimeout(addPopupMessage, 2000);
 			}
 
 			if (autoHide && duration > 0) {
