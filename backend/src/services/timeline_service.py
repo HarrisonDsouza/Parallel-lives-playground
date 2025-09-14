@@ -8,6 +8,7 @@ from src.services.data_transformer import DataTransformer
 from src.services.investease_client import register_client_with_investease
 from src.services.market_simulator import simulate_timeline
 
+
 class TimelineService:
     def __init__(self):
         self.data_transformer = DataTransformer()
@@ -29,17 +30,21 @@ class TimelineService:
 
         # Step 2: Transform data through Cohere AI
         print("Step 1: Transforming kid's data through Cohere AI...")
-        enhanced_client_data = self.data_transformer.transform_user_to_client_data(frontend_data)
+        enhanced_client_data = self.data_transformer.transform_user_to_client_data(
+            frontend_data)
 
         print("Step 2: Analyzing kid's profile...")
-        profile_analysis = self.data_transformer.analyze_profile_text(profile_text)
+        profile_analysis = self.data_transformer.analyze_profile_text(
+            profile_text)
 
         # Step 3: Register with Investease API - complete portfolio creation and simulation
         print("Step 3: Creating complete Investease profile with portfolios...")
-        investease_response = register_client_with_investease(enhanced_client_data)
+        investease_response = register_client_with_investease(
+            enhanced_client_data)
 
         if not investease_response['success']:
-            raise Exception(f"Failed to register with Investease: {investease_response['error']}")
+            raise Exception(
+                f"Failed to register with Investease: {investease_response['error']}")
 
         investease_data = investease_response['data']
 
@@ -65,10 +70,22 @@ class TimelineService:
             'enhancedProfile': enhanced_client_data,
             'profileAnalysis': profile_analysis,
 
-            # Investease API results (for backend reference)
+            # RBC Investease API integration (for technical demo)
+            'rbc_investease': {
+                'client': investease_data['client'],
+                'portfolios': investease_data['portfolios_created'],
+                'simulation_results': investease_data.get('rbc_simulation_results'),
+                'api_metadata': investease_data.get('rbc_api_metadata'),
+                'client_id': investease_data['client_id']
+            },
+
+            # Kid-friendly adventures (for educational demo)
+            'kid_adventures': investease_data.get('kid_adventures'),
+
+            # Legacy format for backward compatibility
             'investeaseClient': investease_data['client'],
             'investeasePortfolios': investease_data['portfolios_created'],
-            'investeaseSimulation': investease_data['simulation_results'],
+            'investeaseSimulation': investease_data.get('rbc_simulation_results'),
             'investeaseClientId': investease_data['client_id'],
 
             # Educational metadata
@@ -103,7 +120,8 @@ class TimelineService:
         print(f"=== Creating Simple Educational Timeline for {name} ===")
 
         # Only do AI analysis, no external API calls
-        profile_analysis = self.data_transformer.analyze_profile_text(profile_text)
+        profile_analysis = self.data_transformer.analyze_profile_text(
+            profile_text)
 
         timeline_id = str(uuid.uuid4())
         simulation = simulate_timeline(timeline_id, choices)

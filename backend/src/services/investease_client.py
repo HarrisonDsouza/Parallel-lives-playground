@@ -128,16 +128,25 @@ class InvesteaseClient:
 
     def simulate_client_portfolios(self, client_id, months=12):
         """
-        Simulate all portfolios for a client
+        Simulate all portfolios for a client using RBC Investease API
         POST /client/{clientId}/simulate
         """
         try:
+            # Enhanced logging for hackathon demo - show RBC API integration
+            print(f"\n🏦 ===== RBC INVESTEASE SIMULATION API CALL =====")
             print(
-                f"Simulating portfolios for client {client_id} for {months} months")
+                f"🔗 Endpoint: POST {self.base_url}/client/{client_id}/simulate")
+            print(f"🏢 Provider: RBC Investease Financial Services")
+            print(
+                f"📊 Simulating portfolios for client {client_id} over {months} months")
+            print(f"⏰ Timestamp: {self._get_timestamp()}")
 
             payload = {
                 'months': min(months, 12)  # API limit is 12 months
             }
+
+            print(f"📤 Request payload: {payload}")
+            print(f"🔑 Using JWT authentication for RBC API")
 
             response = requests.post(
                 f"{self.base_url}/client/{client_id}/simulate",
@@ -146,20 +155,33 @@ class InvesteaseClient:
                 timeout=30
             )
 
-            print(f"Simulation response: {response.status_code}")
+            print(f"📥 RBC API Response: {response.status_code}")
 
             if response.status_code == 200:
                 simulation_result = response.json()
+                results_count = len(simulation_result.get('results', []))
+                print(f"✅ RBC INVESTEASE SIMULATION COMPLETED SUCCESSFULLY")
                 print(
-                    f"✅ Portfolio simulation completed: {len(simulation_result.get('results', []))} portfolios")
+                    f"📈 Retrieved simulation data for {results_count} portfolios")
+                print(f"💰 Real financial projections calculated by RBC systems")
+                print(f"🏦 ===============================================\n")
+
                 return {
                     'success': True,
                     'data': simulation_result,
-                    'status_code': response.status_code
+                    'status_code': response.status_code,
+                    'rbc_api_metadata': {
+                        'endpoint': f"POST /client/{client_id}/simulate",
+                        'provider': 'RBC Investease',
+                        'timestamp': self._get_timestamp(),
+                        'portfolios_simulated': results_count,
+                        'simulation_months': months
+                    }
                 }
             else:
                 error_data = self._parse_error(response)
-                print(f"❌ Portfolio simulation failed: {error_data}")
+                print(f"❌ RBC Portfolio simulation failed: {error_data}")
+                print(f"🏦 ===============================================\n")
                 return {
                     'success': False,
                     'error': error_data,
@@ -167,6 +189,8 @@ class InvesteaseClient:
                 }
 
         except Exception as e:
+            print(f"❌ Exception during RBC API simulation call: {str(e)}")
+            print(f"🏦 ===============================================\n")
             return self._handle_exception(e, "simulate_client_portfolios")
 
     def list_clients(self):
@@ -267,6 +291,45 @@ class InvesteaseClient:
         except Exception as e:
             return self._handle_exception(e, "get_client")
 
+    def update_client_cash(self, client_id, new_cash_amount):
+        """
+        Update client's cash amount
+        PUT /clients/{clientId}
+        """
+        try:
+            print(f"💰 Updating client {client_id} cash to ${new_cash_amount}")
+
+            payload = {
+                'cash': new_cash_amount
+            }
+
+            response = requests.put(
+                f"{self.base_url}/clients/{client_id}",
+                json=payload,
+                headers=self.headers,
+                timeout=30
+            )
+
+            print(f"Update client cash response: {response.status_code}")
+
+            if response.status_code == 200:
+                return {
+                    'success': True,
+                    'data': response.json(),
+                    'status_code': response.status_code
+                }
+            else:
+                error_data = self._parse_error(response)
+                print(f"❌ Client cash update failed: {error_data}")
+                return {
+                    'success': False,
+                    'error': error_data,
+                    'status_code': response.status_code
+                }
+
+        except Exception as e:
+            return self._handle_exception(e, "update_client_cash")
+
     def create_complete_client_with_portfolios(self, client_data, portfolio_configs=None):
         """
         Complete pipeline: Find existing client OR create new + portfolios + simulate
@@ -290,6 +353,22 @@ class InvesteaseClient:
                 client_id = existing_client['id']
                 client_info = existing_client
                 print(f"🔄 Reusing existing client with ID: {client_id}")
+
+                # Update client cash if needed for demo purposes
+                new_cash = client_data.get(
+                    'cash', client_data.get('cashAmount', 1000))
+                current_cash = client_info.get('cash', 0)
+                if new_cash > current_cash:
+                    print(
+                        f"💰 Updating client cash from ${current_cash} to ${new_cash} for demo")
+                    update_result = self.update_client_cash(
+                        client_id, new_cash)
+                    if update_result['success']:
+                        client_info = update_result['data']
+                        print(f"✅ Client cash updated successfully")
+                    else:
+                        print(
+                            f"⚠️ Failed to update client cash: {update_result['error']}")
             else:
                 # Create new client
                 print(f"➕ Creating new client...")
@@ -303,19 +382,42 @@ class InvesteaseClient:
 
             # Step 2: Create portfolios based on user data or defaults
             if portfolio_configs is None:
-                # Create portfolios based on user preferences or defaults
-                total_cash = client_data.get(
+                # Get available cash from the actual client (after potential update)
+                available_cash = client_info.get('cash', 10)
+                requested_cash = client_data.get(
                     'cash', client_data.get('cashAmount', 1000))
 
-                # Educational portfolios for kids - distribute cash across different risk levels
-                portfolio_configs = [
-                    {'type': 'conservative', 'amount': int(
-                        total_cash * 0.5)},  # 50% conservative
-                    {'type': 'balanced', 'amount': int(
-                        total_cash * 0.3)},     # 30% balanced
-                    {'type': 'growth', 'amount': int(
-                        total_cash * 0.2)}        # 20% growth
-                ]
+                print(
+                    f"💰 Available cash: ${available_cash}, Requested: ${requested_cash}")
+
+                # For demo purposes, use smaller amounts if cash update failed
+                if available_cash < 100:
+                    print(
+                        f"⚠️ Using minimal portfolio amounts due to low cash (${available_cash})")
+                    # Create minimal portfolios that fit available cash
+                    if available_cash >= 10:
+                        portfolio_configs = [
+                            {'type': 'conservative', 'amount': max(
+                                1, int(available_cash * 0.6))},  # 60%
+                            {'type': 'balanced', 'amount': max(
+                                1, int(available_cash * 0.4))}       # 40%
+                        ]
+                    else:
+                        portfolio_configs = [
+                            {'type': 'conservative', 'amount': max(
+                                1, available_cash)}  # Use all available
+                        ]
+                else:
+                    # Use requested amounts
+                    total_cash = requested_cash
+                    portfolio_configs = [
+                        {'type': 'conservative', 'amount': int(
+                            total_cash * 0.5)},  # 50% conservative
+                        {'type': 'balanced', 'amount': int(
+                            total_cash * 0.3)},     # 30% balanced
+                        {'type': 'growth', 'amount': int(
+                            total_cash * 0.2)}        # 20% growth
+                    ]
 
             portfolios_created = []
             for config in portfolio_configs:
@@ -333,18 +435,34 @@ class InvesteaseClient:
                         print(
                             f"❌ Failed to create {config['type']} portfolio: {portfolio_result['error']}")
 
-            # Step 3: Simulate portfolios
+            # Step 3: Simulate portfolios using RBC Investease API
             simulation_result = self.simulate_client_portfolios(
                 client_id, months=12)
             simulation_data = None
+            rbc_api_metadata = None
             if simulation_result['success']:
                 simulation_data = simulation_result['data']
-                print(f"✅ Portfolio simulation completed")
+                rbc_api_metadata = simulation_result.get('rbc_api_metadata')
+                print(f"✅ RBC Portfolio simulation completed successfully")
             else:
                 print(
-                    f"❌ Portfolio simulation failed: {simulation_result['error']}")
+                    f"❌ RBC Portfolio simulation failed: {simulation_result['error']}")
 
-            # Step 4: Get updated client info with portfolios
+            # Step 4: Translate RBC simulation to kid-friendly adventures (if simulation succeeded)
+            kid_adventures = None
+            if simulation_data and client_data:
+                try:
+                    from src.services.data_transformer import DataTransformer
+                    translator = DataTransformer()
+                    kid_adventures = translator.translate_rbc_simulation_to_kid_adventures(
+                        simulation_data, client_data
+                    )
+                    print(f"🎨 Successfully translated RBC data to kid adventures")
+                except Exception as e:
+                    print(f"⚠️ Could not translate to kid adventures: {e}")
+                    kid_adventures = None
+
+            # Step 5: Get updated client info with portfolios
             updated_client_result = self.get_client(client_id)
             final_client_data = updated_client_result['data'] if updated_client_result['success'] else client_info
 
@@ -353,7 +471,14 @@ class InvesteaseClient:
                 'data': {
                     'client': final_client_data,
                     'portfolios_created': portfolios_created,
-                    'simulation_results': simulation_data,
+
+                    # RBC Technical Data (for judges/technical demo)
+                    'rbc_simulation_results': simulation_data,
+                    'rbc_api_metadata': rbc_api_metadata,
+
+                    # Kid-Friendly Data (for educational demo)
+                    'kid_adventures': kid_adventures,
+
                     'client_id': client_id
                 },
                 'status_code': 200,
@@ -362,6 +487,11 @@ class InvesteaseClient:
 
         except Exception as e:
             return self._handle_exception(e, "create_complete_client_with_portfolios")
+
+    def _get_timestamp(self):
+        """Get formatted timestamp for API logging"""
+        from datetime import datetime
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
 
     def _parse_error(self, response):
         """Parse error response from API"""

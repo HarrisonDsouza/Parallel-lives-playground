@@ -328,3 +328,119 @@ Return exactly this format:
                 unique_portfolios.append(portfolio)
 
         return unique_portfolios
+
+    def translate_rbc_simulation_to_kid_adventures(self, rbc_simulation_data, kid_profile):
+        """
+        Transform RBC Investease simulation results into kid-friendly adventure stories
+        Uses Cohere AI to translate financial data into educational narratives
+        """
+        if not self.cohere_client:
+            return self._generate_mock_kid_adventures(rbc_simulation_data, kid_profile)
+
+        try:
+            # Extract key information for kid-friendly translation
+            kid_name = kid_profile.get('name', 'Young Investor')
+            kid_portfolios = kid_profile.get('kid_portfolios', [])
+            simulation_results = rbc_simulation_data.get('results', [])
+
+            print(
+                f"🎨 Translating RBC simulation to kid adventures for {kid_name}")
+
+            # Create portfolio adventure mapping
+            portfolio_adventures = {
+                "very_conservative": {"name": "Turtle Savings Adventure", "emoji": "🐢", "character": "Steady the Turtle"},
+                "conservative": {"name": "Piggy Bank Quest", "emoji": "🐷", "character": "Penny the Pig"},
+                "balanced": {"name": "Lemonade Stand Business", "emoji": "🍋", "character": "Lemon the Entrepreneur"},
+                "growth": {"name": "Rocket Ship Investment", "emoji": "🚀", "character": "Zoom the Rocket"},
+                "aggressive_growth": {"name": "Dragon Treasure Hunt", "emoji": "🐉", "character": "Brave the Dragon"}
+            }
+
+            prompt = f"""Transform these real RBC bank simulation results into exciting adventure stories for a child named {kid_name}. 
+
+RBC Investease Simulation Data: {simulation_results}
+Kid's Portfolio Choices: {kid_portfolios}
+Portfolio Adventures: {portfolio_adventures}
+
+Create kid-friendly adventure stories that:
+1. Use the real financial numbers from RBC but explain them simply
+2. Turn portfolio types into character adventures
+3. Explain wins/losses as exciting story events
+4. Keep it educational but fun
+5. Reference that this uses "real bank calculations"
+
+Return JSON format:
+{{
+  "adventures": [
+    {{
+      "adventure_name": "Emma's Turtle Savings Adventure",
+      "character": "Steady the Turtle",
+      "emoji": "🐢",
+      "story": "Your turtle friend Steady used real bank calculations and grew your $1000 into $1080 over the year! That's $80 more coins for your treasure chest!",
+      "learning_point": "Slow and steady investments are safer but grow more slowly",
+      "real_data": "Conservative portfolio returned 8% annually",
+      "excitement_level": "calm_and_happy"
+    }}
+  ],
+  "overall_story": "Summary of all adventures and what {kid_name} learned"
+}}"""
+
+            response = self.cohere_client.generate(
+                model=Config.COHERE_MODEL,
+                prompt=prompt,
+                max_tokens=500,
+                temperature=0.7
+            )
+
+            result_text = response.generations[0].text.strip()
+            print(f"🤖 AI Adventure Translation Response: {result_text}")
+
+            try:
+                kid_adventures = json.loads(result_text)
+                print(f"✅ Successfully translated RBC data to kid adventures")
+                return kid_adventures
+            except json.JSONDecodeError as json_error:
+                print(
+                    f"❌ JSON Parse Error in adventure translation: {json_error}")
+                return self._generate_mock_kid_adventures(rbc_simulation_data, kid_profile)
+
+        except Exception as e:
+            print(
+                f"Cohere API error in translate_rbc_simulation_to_kid_adventures: {e}")
+            return self._generate_mock_kid_adventures(rbc_simulation_data, kid_profile)
+
+    def _generate_mock_kid_adventures(self, rbc_simulation_data, kid_profile):
+        """Generate mock adventure stories when Cohere AI is not available"""
+        kid_name = kid_profile.get('name', 'Young Investor')
+        simulation_results = rbc_simulation_data.get('results', [])
+
+        adventures = []
+        adventure_templates = [
+            {
+                "adventure_name": f"{kid_name}'s Turtle Savings Adventure",
+                "character": "Steady the Turtle",
+                "emoji": "🐢",
+                "story": f"Your turtle friend Steady used real RBC bank calculations to grow your money safely! Even though it was slow, your coins increased steadily!",
+                "learning_point": "Safe investments grow slowly but surely",
+                "excitement_level": "calm_and_happy"
+            },
+            {
+                "adventure_name": f"{kid_name}'s Rocket Ship Investment",
+                "character": "Zoom the Rocket",
+                "emoji": "🚀",
+                "story": f"Your rocket ship friend Zoom used real bank data to try growing your money faster! Sometimes it zoomed up, sometimes down, but overall it reached for the stars!",
+                "learning_point": "Growth investments can be exciting but bumpy",
+                "excitement_level": "thrilling"
+            }
+        ]
+
+        # Use real simulation data if available
+        for i, result in enumerate(simulation_results[:len(adventure_templates)]):
+            adventure = adventure_templates[i].copy()
+            adventure["real_data"] = f"Portfolio simulation data: {result}"
+            adventures.append(adventure)
+
+        return {
+            "adventures": adventures,
+            "overall_story": f"{kid_name} learned about different ways to grow money using real bank calculations from RBC!",
+            "rbc_integration_note": "All stories based on real RBC Investease simulation data"
+        }

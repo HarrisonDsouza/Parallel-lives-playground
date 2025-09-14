@@ -546,7 +546,8 @@ export default function Visit() {
 								}}
 							>
 								Family Impact Score:{" "}
-								{((simulated?.multiplier ?? 1) * 10).toFixed(0)}/30
+								{((simulated?.multiplier ?? 1) * 10).toFixed(0)}
+								/30
 							</div>
 							<p
 								style={{
@@ -561,6 +562,294 @@ export default function Visit() {
 									: "💡 Great learning opportunity! Talk about balancing fun spending with saving for big dreams."}
 							</p>
 						</div>
+					</div>
+				)}
+
+				{/* RBC Investease Integration Showcase */}
+				{timeline.rbc_investease && (
+					<div
+						style={{
+							background: "#f8f6ff",
+							border: "3px solid #7c3aed",
+							borderRadius: 15,
+							padding: 20,
+							marginBottom: 25,
+						}}
+					>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								gap: "15px",
+								marginBottom: 15,
+							}}
+						>
+							<div
+								style={{
+									background: "#7c3aed",
+									color: "white",
+									borderRadius: "50%",
+									width: 50,
+									height: 50,
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									fontSize: "1.5em",
+								}}
+							>
+								🏦
+							</div>
+							<div>
+								<h3
+									style={{
+										margin: 0,
+										color: "#7c3aed",
+										fontSize: "1.4em",
+									}}
+								>
+									Powered by RBC Investease
+								</h3>
+								<p
+									style={{
+										margin: 0,
+										color: "#666",
+										fontSize: "0.9em",
+									}}
+								>
+									Real financial calculations from RBC Bank
+								</p>
+							</div>
+						</div>
+
+						{/* API Integration Details (for technical demo) */}
+						{showParent && timeline.rbc_investease.api_metadata && (
+							<div
+								style={{
+									background: "#ede9fe",
+									border: "2px solid #8b5cf6",
+									borderRadius: 10,
+									padding: 15,
+									marginBottom: 15,
+								}}
+							>
+								<h4
+									style={{
+										margin: "0 0 10px 0",
+										color: "#8b5cf6",
+									}}
+								>
+									🔧 API Integration Details
+								</h4>
+								<div
+									style={{
+										display: "grid",
+										gridTemplateColumns: "1fr 1fr",
+										gap: 10,
+										fontSize: "0.9em",
+									}}
+								>
+									<div>
+										<strong>Endpoint:</strong>
+										<br />
+										<code
+											style={{
+												background: "#fff",
+												padding: "2px 6px",
+												borderRadius: 4,
+											}}
+										>
+											{
+												timeline.rbc_investease
+													.api_metadata.endpoint
+											}
+										</code>
+									</div>
+									<div>
+										<strong>Provider:</strong>
+										<br />
+										{
+											timeline.rbc_investease.api_metadata
+												.provider
+										}
+									</div>
+									<div>
+										<strong>Portfolios Simulated:</strong>
+										<br />
+										{
+											timeline.rbc_investease.api_metadata
+												.portfolios_simulated
+										}
+									</div>
+									<div>
+										<strong>Simulation Period:</strong>
+										<br />
+										{
+											timeline.rbc_investease.api_metadata
+												.simulation_months
+										}{" "}
+										months
+									</div>
+								</div>
+							</div>
+						)}
+
+						{/* Kid Adventures Display */}
+						{timeline.kid_adventures &&
+							timeline.kid_adventures.adventures && (
+								<div>
+									<h4
+										style={{
+											margin: "0 0 15px 0",
+											color: "#7c3aed",
+										}}
+									>
+										🎮 Your Money Adventures
+									</h4>
+									<div
+										style={{
+											display: "grid",
+											gridTemplateColumns:
+												"repeat(auto-fit, minmax(280px, 1fr))",
+											gap: 15,
+										}}
+									>
+										{timeline.kid_adventures.adventures.map(
+											(adventure, i) => (
+												<div
+													key={i}
+													style={{
+														background: "#fff",
+														border: "2px solid #4caf50",
+														borderRadius: 12,
+														padding: 15,
+													}}
+												>
+													<div
+														style={{
+															display: "flex",
+															alignItems:
+																"center",
+															gap: "10px",
+															marginBottom: 10,
+														}}
+													>
+														<span
+															style={{
+																fontSize:
+																	"1.5em",
+															}}
+														>
+															{adventure.emoji}
+														</span>
+														<h5
+															style={{
+																margin: 0,
+																color: "#2e7d32",
+																fontSize:
+																	"1.1em",
+															}}
+														>
+															{
+																adventure.adventure_name
+															}
+														</h5>
+													</div>
+													<p
+														style={{
+															margin: "0 0 10px 0",
+															fontSize: "0.95em",
+															lineHeight: 1.4,
+															color: "#333",
+														}}
+													>
+														{adventure.story}
+													</p>
+													{adventure.learning_point && (
+														<div
+															style={{
+																background:
+																	"#f1f8e9",
+																border: "1px solid #8bc34a",
+																borderRadius: 8,
+																padding: 8,
+																fontSize:
+																	"0.85em",
+																color: "#33691e",
+															}}
+														>
+															💡{" "}
+															<strong>
+																Learning:
+															</strong>{" "}
+															{
+																adventure.learning_point
+															}
+														</div>
+													)}
+													{showParent &&
+														adventure.real_data && (
+															<div
+																style={{
+																	background:
+																		"#fff3e0",
+																	border: "1px solid #ff9800",
+																	borderRadius: 8,
+																	padding: 8,
+																	marginTop: 8,
+																	fontSize:
+																		"0.8em",
+																	color: "#e65100",
+																}}
+															>
+																📊{" "}
+																<strong>
+																	Technical:
+																</strong>{" "}
+																{
+																	adventure.real_data
+																}
+															</div>
+														)}
+												</div>
+											)
+										)}
+									</div>
+									{timeline.kid_adventures.overall_story && (
+										<div
+											style={{
+												background: "#fff",
+												border: "2px solid #ff9800",
+												borderRadius: 12,
+												padding: 15,
+												marginTop: 15,
+												textAlign: "center",
+											}}
+										>
+											<h5
+												style={{
+													margin: "0 0 8px 0",
+													color: "#f57c00",
+												}}
+											>
+												🌟 Overall Adventure Summary
+											</h5>
+											<p
+												style={{
+													margin: 0,
+													fontSize: "0.95em",
+													fontStyle: "italic",
+													color: "#333",
+												}}
+											>
+												{
+													timeline.kid_adventures
+														.overall_story
+												}
+											</p>
+										</div>
+									)}
+								</div>
+							)}
 					</div>
 				)}
 
