@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CharacterMascot from '../components/CharacterMascot';
+import { createTimelineWithRegistration } from '../api/apiClient';
 
 // Set default headers for axios
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -12,29 +13,62 @@ const API = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api';
 export default function TimelineEditor() {
   const [name, setName] = useState('');
   const [owner, setOwner] = useState('You');
+  const [email, setEmail] = useState('');
+  const [cashAmount, setCashAmount] = useState(10000);
+  const [portfolios, setPortfolios] = useState([]);
   const [choices, setChoices] = useState('');
   const [profileText, setProfileText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [useRegistration, setUseRegistration] = useState(false);
   const nav = useNavigate();
 
   async function createTimeline(e) {
     e.preventDefault();
     setLoading(true);
+    
     try {
-      const payload = { owner, name, choices: choices.split(',').map(s => s.trim()).filter(Boolean), profileText };
-      const res = await axios.post(`${API}/timelines/`, payload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const locals = JSON.parse(localStorage.getItem('pl_local_timelines') || '[]');
-      locals.unshift(res.data);
-      localStorage.setItem('pl_local_timelines', JSON.stringify(locals));
-      setLoading(false);
-      nav(`/visit/${res.data.id}`);
+      let res;
+      
+      if (useRegistration) {
+        // Use the new registration endpoint
+        const userData = {
+          name: owner,
+          email,
+          cashAmount,
+          portfolios,
+          profileText,
+          choices: choices.split(',').map(s => s.trim()).filter(Boolean)
+        };
+        
+        res = await createTimelineWithRegistration(userData);
+        
+        if (res.success) {
+          const locals = JSON.parse(localStorage.getItem('pl_local_timelines') || '[]');
+          locals.unshift(res.timeline);
+          localStorage.setItem('pl_local_timelines', JSON.stringify(locals));
+          setLoading(false);
+          alert('Timeline created and client registered successfully!');
+          nav(`/visit/${res.timeline.id}`);
+        } else {
+          throw new Error(res.error || 'Registration failed');
+        }
+      } else {
+        // Use the original timeline creation
+        const payload = { owner, name, choices: choices.split(',').map(s => s.trim()).filter(Boolean), profileText };
+        res = await axios.post(`${API}/timelines/`, payload, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const locals = JSON.parse(localStorage.getItem('pl_local_timelines') || '[]');
+        locals.unshift(res.data);
+        localStorage.setItem('pl_local_timelines', JSON.stringify(locals));
+        setLoading(false);
+        nav(`/visit/${res.data.id}`);
+      }
     } catch (err) {
       console.error(err);
-      alert('Error creating timeline');
+      alert(`Error creating timeline: ${err.message || err}`);
       setLoading(false);
     }
   }
@@ -49,6 +83,22 @@ export default function TimelineEditor() {
           <p style={{fontSize: '1.2em', color: '#666', margin: '10px 0'}}>
             What if you could see into the future? Let's build your story and see what happens! ✨
           </p>
+          
+          {/* Registration Toggle */}
+          <div style={{background: '#e7f3ff', border: '2px solid #007bff', borderRadius: 15, padding: 20, margin: '20px 0', textAlign: 'left'}}>
+            <label style={{display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '1.1em', fontWeight: 'bold', color: '#0056b3'}}>
+              <input 
+                type="checkbox" 
+                checked={useRegistration} 
+                onChange={e => setUseRegistration(e.target.checked)}
+                style={{marginRight: 10, transform: 'scale(1.2)'}}
+              />
+              🚀 Create My First Timeline! (Register with AI-powered client system)
+            </label>
+            <p style={{fontSize: '0.9em', color: '#0056b3', margin: '8px 0 0 30px', fontStyle: 'italic'}}>
+              Enable this to use Cohere AI to generate your financial profile and register with our AWS system!
+            </p>
+          </div>
         </div>
         
         <form onSubmit={createTimeline}>
@@ -97,6 +147,109 @@ export default function TimelineEditor() {
               required
             />
           </div>
+
+          {/* Registration Fields - Only show when registration is enabled */}
+          {useRegistration && (
+            <>
+              <div style={{background: '#e8f5e8', border: '3px solid #28a745', borderRadius: 15, padding: 20, marginBottom: 25}}>
+                <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#155724'}}>
+                  📧 Your Email Address
+                </label>
+                <p style={{fontSize: '1em', color: '#155724', margin: '0 0 12px 0'}}>
+                  We need your email to register you in our financial system!
+                </p>
+                <input 
+                  type="email"
+                  style={{width: '100%', padding: 15, border: '2px solid #28a745', borderRadius: 10, fontSize: '1.1em'}}
+                  value={email} 
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  required={useRegistration}
+                />
+              </div>
+
+              <div style={{background: '#fff3e0', border: '3px solid #ff9800', borderRadius: 15, padding: 20, marginBottom: 25}}>
+                <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#e65100'}}>
+                  💰 Starting Cash Amount
+                </label>
+                <p style={{fontSize: '1em', color: '#e65100', margin: '0 0 12px 0'}}>
+                  How much money do you want to start your financial journey with?
+                </p>
+                <div style={{display: 'flex', gap: 10, marginBottom: 12}}>
+                  {[1000, 5000, 10000, 25000, 50000].map(amount => (
+                    <button 
+                      key={amount}
+                      type="button" 
+                      onClick={() => setCashAmount(amount)}
+                      style={{
+                        background: cashAmount === amount ? '#ff9800' : 'white',
+                        color: cashAmount === amount ? 'white' : '#ff9800',
+                        border: '2px solid #ff9800',
+                        padding: '8px 12px',
+                        borderRadius: 20,
+                        cursor: 'pointer',
+                        fontSize: '0.9em',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      ${amount.toLocaleString()}
+                    </button>
+                  ))}
+                </div>
+                <input 
+                  type="number"
+                  style={{width: '100%', padding: 15, border: '2px solid #ff9800', borderRadius: 10, fontSize: '1.1em'}}
+                  value={cashAmount} 
+                  onChange={e => setCashAmount(Number(e.target.value))}
+                  placeholder="10000"
+                  min="0"
+                  required={useRegistration}
+                />
+              </div>
+
+              <div style={{background: '#f3e5f5', border: '3px solid #9c27b0', borderRadius: 15, padding: 20, marginBottom: 25}}>
+                <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#4a148c'}}>
+                  📈 Investment Portfolios
+                </label>
+                <p style={{fontSize: '1em', color: '#4a148c', margin: '0 0 12px 0'}}>
+                  What types of investments are you interested in? (Optional - AI will suggest based on your profile)
+                </p>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 12}}>
+                  {['Stocks', 'Bonds', 'ETFs', 'Crypto', 'Real Estate', 'Mutual Funds'].map(portfolio => (
+                    <button 
+                      key={portfolio}
+                      type="button" 
+                      onClick={() => {
+                        if (portfolios.includes(portfolio)) {
+                          setPortfolios(portfolios.filter(p => p !== portfolio));
+                        } else {
+                          setPortfolios([...portfolios, portfolio]);
+                        }
+                      }}
+                      style={{
+                        background: portfolios.includes(portfolio) ? '#9c27b0' : 'white',
+                        color: portfolios.includes(portfolio) ? 'white' : '#9c27b0',
+                        border: '2px solid #9c27b0',
+                        padding: '8px 12px',
+                        borderRadius: 20,
+                        cursor: 'pointer',
+                        fontSize: '0.9em',
+                        fontWeight: 'bold'
+                      }}
+                    >
+                      {portfolio}
+                    </button>
+                  ))}
+                </div>
+                <input 
+                  style={{width: '100%', padding: 15, border: '2px solid #9c27b0', borderRadius: 10, fontSize: '1.1em'}}
+                  value={portfolios.join(', ')} 
+                  onChange={e => setPortfolios(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                  placeholder="Click buttons above or type: Stocks, ETFs, Bonds"
+                />
+              </div>
+            </>
+          )}
 
           <div style={{background: '#d1ecf1', border: '3px solid #17a2b8', borderRadius: 15, padding: 20, marginBottom: 25}}>
             <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#0c5460'}}>

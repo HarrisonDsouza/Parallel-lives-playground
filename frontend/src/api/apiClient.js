@@ -31,3 +31,9 @@ export async function withdrawFromPortfolio(portfolioId, amount) {
 		.post(`/portfolios/${portfolioId}/withdraw`, { amount })
 		.then((r) => r.data);
 }
+
+export async function createTimelineWithRegistration(userData) {
+	return api
+		.post("/timelines/create-with-registration", userData)
+		.then((r) => r.data);
+}

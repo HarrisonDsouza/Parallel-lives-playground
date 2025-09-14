@@ -81,3 +81,106 @@ Response format:
     except Exception as e:
         print(f"Cohere API error: {e}")
         return mock_analyze_profile(profile_text)
+
+def generate_client_data(user_data):
+    """Generate enhanced client data using Cohere AI based on user input."""
+    cohere_api_key = os.getenv('COHERE_API_KEY')
+    
+    name = user_data.get('name', 'Anonymous User')
+    email = user_data.get('email', 'user@example.com')
+    cash_amount = user_data.get('cashAmount', 10000)
+    portfolios = user_data.get('portfolios', [])
+    
+    # Mock data generation if no Cohere API key
+    if not cohere_api_key:
+        return generate_mock_client_data(user_data)
+    
+    try:
+        co = cohere.Client(cohere_api_key)
+        
+        prompt = f"""Based on the following user information, generate realistic financial profile data for a client registration system. 
+
+User Info:
+- Name: {name}
+- Email: {email}
+- Cash Amount: ${cash_amount}
+- Portfolios: {portfolios}
+
+Generate the following additional fields in JSON format:
+- age: realistic age (25-65)
+- phone: realistic phone number format
+- address: realistic address
+- occupation: suitable occupation based on cash amount
+- riskTolerance: "conservative", "moderate", or "aggressive"
+- investmentGoals: array of 2-3 realistic goals
+- timeHorizon: investment time horizon in years (1-30)
+
+Response format:
+{{
+  "age": 35,
+  "phone": "+1-555-123-4567",
+  "address": "123 Main St, City, State 12345",
+  "occupation": "Software Engineer",
+  "riskTolerance": "moderate",
+  "investmentGoals": ["retirement", "wealth building"],
+  "timeHorizon": 15
+}}"""
+        
+        response = co.generate(
+            model='command-light',
+            prompt=prompt,
+            max_tokens=200,
+            temperature=0.5
+        )
+        
+        result_text = response.generations[0].text.strip()
+        
+        import json
+        try:
+            generated_data = json.loads(result_text)
+            
+            # Combine user data with generated data
+            client_data = {
+                'name': name,
+                'email': email,
+                'cashAmount': cash_amount,
+                'portfolios': portfolios,
+                **generated_data
+            }
+            
+            return client_data
+            
+        except json.JSONDecodeError:
+            print("Failed to parse Cohere response, using mock data")
+            return generate_mock_client_data(user_data)
+            
+    except Exception as e:
+        print(f"Cohere API error in generate_client_data: {e}")
+        return generate_mock_client_data(user_data)
+
+def generate_mock_client_data(user_data):
+    """Generate mock client data when Cohere API is not available."""
+    import random
+    
+    name = user_data.get('name', 'Anonymous User')
+    email = user_data.get('email', 'user@example.com')
+    cash_amount = user_data.get('cashAmount', 10000)
+    portfolios = user_data.get('portfolios', [])
+    
+    occupations = ['Software Engineer', 'Teacher', 'Marketing Manager', 'Accountant', 'Designer']
+    risk_levels = ['conservative', 'moderate', 'aggressive']
+    goals = ['retirement', 'wealth building', 'education fund', 'emergency fund', 'home purchase']
+    
+    return {
+        'name': name,
+        'email': email,
+        'cashAmount': cash_amount,
+        'portfolios': portfolios,
+        'age': random.randint(25, 65),
+        'phone': f"+1-555-{random.randint(100, 999)}-{random.randint(1000, 9999)}",
+        'address': f"{random.randint(100, 9999)} {random.choice(['Main', 'Oak', 'Pine', 'Elm'])} St, City, State {random.randint(10000, 99999)}",
+        'occupation': random.choice(occupations),
+        'riskTolerance': random.choice(risk_levels),
+        'investmentGoals': random.sample(goals, 2),
+        'timeHorizon': random.randint(5, 25)
+    }
