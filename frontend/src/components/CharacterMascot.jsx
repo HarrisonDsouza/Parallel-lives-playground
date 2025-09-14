@@ -35,7 +35,7 @@ export default function CharacterMascot({
 		"🌈 You're amazing!",
 		"💫 Pure magic!",
 		"🦸 You're a hero!",
-		
+
 		// Playful entrance messages
 		`🌪️ Zooming in from the ${entranceDirection}!`,
 		"💨 Surprise entrance!",
@@ -45,7 +45,7 @@ export default function CharacterMascot({
 		"🎢 Roller coaster arrival!",
 		"🎪 Circus is in town!",
 		"🎨 Paint me surprised!",
-		
+
 		// Kid-friendly fun messages
 		"🍎 You're the apple of my eye!",
 		"🌟 Shooting star wishes!",
@@ -67,7 +67,7 @@ export default function CharacterMascot({
 		"🌟 Wish upon a star!",
 		"🎨 Masterpiece maker!",
 		"🎪 Greatest show on earth!",
-		
+
 		// Interactive messages
 		"👀 I spy something awesome!",
 		"🤫 Can you keep a secret?",
@@ -94,12 +94,12 @@ export default function CharacterMascot({
 	const getInitialPosition = (direction) => {
 		const screenWidth = window.innerWidth || 1200;
 		const screenHeight = window.innerHeight || 800;
-		
+
 		switch (direction) {
 			case "left":
 				return { x: -screenWidth - 400, y: 0 }; // Way beyond left edge
 			case "right":
-				return { x: screenWidth + 400, y: 0 }; // Way beyond right edge  
+				return { x: screenWidth + 400, y: 0 }; // Way beyond right edge
 			case "top":
 				return { x: 0, y: -screenHeight - 400 }; // Way above top edge
 			case "bottom":
@@ -118,27 +118,28 @@ export default function CharacterMascot({
 	const getPositionStyle = () => {
 		// Calculate safe positioning that keeps mascot fully visible and below navigation
 		const mascotSize = 280; // Our mascot size
-		const navBarHeight = 120; // Approximate nav bar height with padding
+		// Different navbar heights for home vs other pages
+		const navBarHeight = window.location.pathname === "/" ? 180 : 120; // Home page has bigger header
 		const edgeBuffer = 20; // Buffer from screen edges
-		
+
 		const positions = {
-			"bottom-right": { 
+			"bottom-right": {
 				position: "fixed",
 				bottom: `${edgeBuffer}px`,
 				right: `${edgeBuffer}px`,
 				// No transform needed - position from edge with buffer keeps it fully visible
 			},
-			"bottom-left": { 
+			"bottom-left": {
 				position: "fixed",
-				bottom: `${edgeBuffer}px`, 
+				bottom: `${edgeBuffer}px`,
 				left: `${edgeBuffer}px`,
 			},
-			"top-right": { 
+			"top-right": {
 				position: "fixed",
 				top: `${navBarHeight + edgeBuffer}px`, // Below nav bar + buffer
 				right: `${edgeBuffer}px`,
 			},
-			"top-left": { 
+			"top-left": {
 				position: "fixed",
 				top: `${navBarHeight + edgeBuffer}px`, // Below nav bar + buffer
 				left: `${edgeBuffer}px`,
@@ -362,35 +363,62 @@ export default function CharacterMascot({
 				>
 					{/* Popup Messages */}
 					<AnimatePresence>
-						{popupMessages.map((popup, index) => (
-							<motion.div
-								key={popup.id}
-								variants={popupVariants}
-								initial="hidden"
-								animate="visible"
-								exit="exit"
-								style={{
-									position: "absolute",
-									top: `-${60 + index * 15}px`,
-									left: "50%",
-									transform: "translateX(-50%)",
-									background:
-										"linear-gradient(135deg, #FFD700, #FFA500)",
-									border: "3px solid #FF8C00",
-									borderRadius: "15px",
-									padding: "8px 12px",
-									fontSize: "12px",
-									fontWeight: "bold",
-									color: "#FFF",
-									textShadow: "1px 1px 2px rgba(0,0,0,0.3)",
-									boxShadow: "0 4px 12px rgba(255,215,0,0.4)",
-									whiteSpace: "nowrap",
-									zIndex: 1001 + index,
-								}}
-							>
-								{popup.text}
-							</motion.div>
-						))}
+						{popupMessages.map((popup, index) => {
+							// Calculate safe positioning for popup messages to avoid navbar collision
+							const navBarHeight =
+								window.location.pathname === "/" ? 180 : 120;
+							const safeTopBuffer = navBarHeight + 30; // Safe distance from navbar
+							const popupVerticalOffset = 60 + index * 15;
+
+							// For top-positioned mascots, show popups below the mascot instead of above
+							const isTopPositioned = position.includes("top");
+							const popupTop = isTopPositioned
+								? `calc(${navBarHeight + 20}px + ${
+										280 + 20 + index * 15
+								  }px)` // Below mascot for top positions
+								: `max(${safeTopBuffer}px, calc(100vh - ${
+										popupVerticalOffset + 100
+								  }px))`; // Above mascot but safe for bottom positions
+
+							return (
+								<motion.div
+									key={popup.id}
+									variants={popupVariants}
+									initial="hidden"
+									animate="visible"
+									exit="exit"
+									style={{
+										position: "fixed", // Use fixed positioning for reliable viewport positioning
+										top: popupTop,
+										left: position.includes("right")
+											? "auto"
+											: "50%",
+										right: position.includes("right")
+											? "40px"
+											: "auto",
+										transform: position.includes("right")
+											? "none"
+											: "translateX(-50%)",
+										background:
+											"linear-gradient(135deg, #FFD700, #FFA500)",
+										border: "3px solid #FF8C00",
+										borderRadius: "15px",
+										padding: "8px 12px",
+										fontSize: "12px",
+										fontWeight: "bold",
+										color: "#FFF",
+										textShadow:
+											"1px 1px 2px rgba(0,0,0,0.3)",
+										boxShadow:
+											"0 4px 12px rgba(255,215,0,0.4)",
+										whiteSpace: "nowrap",
+										zIndex: 1001 + index,
+									}}
+								>
+									{popup.text}
+								</motion.div>
+							);
+						})}
 					</AnimatePresence>
 
 					{/* Main mascot container */}

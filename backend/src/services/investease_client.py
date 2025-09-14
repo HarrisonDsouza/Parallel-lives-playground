@@ -383,7 +383,8 @@ class InvesteaseClient:
             # Step 2: Create portfolios based on user data or defaults
             if portfolio_configs is None:
                 # Get available cash from the actual client (after potential update)
-                available_cash = client_info.get('cash', 10)
+                available_cash = client_info.get(
+                    'cash', 5000)  # Higher default for demo
                 requested_cash = client_data.get(
                     'cash', client_data.get('cashAmount', 1000))
 

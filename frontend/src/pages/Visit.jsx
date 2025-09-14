@@ -361,56 +361,161 @@ export default function Visit() {
 						<GameIcon icon="zap" color="#7b1fa2" size={22} />
 						Cool Things That Happened!
 					</h3>
-					<div style={{ display: "grid", gap: 12 }}>
-						{(simulated.events || []).map((event, i) => (
-							<div
-								key={i}
-								style={{
-									background: "white",
-									padding: 15,
-									borderRadius: 10,
-									display: "flex",
-									alignItems: "center",
-									border: `2px solid ${
-										event.impact >= 0
-											? "#4caf50"
-											: "#ff5722"
-									}`,
-								}}
-							>
+					<div style={{ display: "grid", gap: 15 }}>
+						{(simulated.events || []).map((event, i) => {
+							// Enhanced descriptions based on event types
+							const getEventDescription = (eventText, impact) => {
+								const text = eventText.toLowerCase();
+
+								if (
+									text.includes("windfall") ||
+									text.includes("bonus") ||
+									text.includes("side project")
+								) {
+									return {
+										emoji: "💰",
+										title: "Surprise Money Boost!",
+										description:
+											"You got some unexpected money! This shows how side hustles, gifts, or small business ideas can really help your savings grow faster than planned.",
+										lesson: "Extra income opportunities can accelerate your financial goals!",
+									};
+								} else if (
+									text.includes("expense") ||
+									text.includes("emergency") ||
+									text.includes("unexpected")
+								) {
+									return {
+										emoji: "🚨",
+										title: "Surprise Expense Challenge",
+										description:
+											"Life threw you a curveball with an unexpected cost! This is super common in real life - cars break down, phones crack, or surprise events happen.",
+										lesson: "This is why having an emergency fund is so important - you handled it like a pro!",
+									};
+								} else if (
+									text.includes("growth") ||
+									text.includes("compound") ||
+									text.includes("investment")
+								) {
+									return {
+										emoji: "📈",
+										title: "Investment Magic at Work!",
+										description:
+											"Your money made more money while you slept! This is the power of compound growth - your investments earned returns, and those returns earned even more returns.",
+										lesson: "Time + patience + smart investing = financial superpowers!",
+									};
+								} else if (
+									text.includes("market") &&
+									impact < 0
+								) {
+									return {
+										emoji: "🎢",
+										title: "Market Roller Coaster Ride",
+										description:
+											"The market went down temporarily, which affected your investments. This is totally normal - markets go up and down like a roller coaster!",
+										lesson: "Smart investors stay calm during bumpy rides because markets recover over time!",
+									};
+								} else if (
+									text.includes("dividend") ||
+									text.includes("interest")
+								) {
+									return {
+										emoji: "🎁",
+										title: "Your Money Earned a Paycheck!",
+										description:
+											"Your investments paid you dividends or interest! It's like your money got a job and earned income while you focused on other things.",
+										lesson: "Passive income means your money works for you, not the other way around!",
+									};
+								} else {
+									// Default descriptions
+									return impact >= 0
+										? {
+												emoji: "🌟",
+												title: "Financial Win!",
+												description:
+													event.text +
+													" This positive event helped boost your financial journey and brought you closer to your goals.",
+												lesson: "Great financial habits lead to great outcomes!",
+										  }
+										: {
+												emoji: "💪",
+												title: "Learning Experience",
+												description:
+													event.text +
+													" This challenge taught you valuable lessons about managing money and planning for the unexpected.",
+												lesson: "Every setback is a setup for a comeback!",
+										  };
+								}
+							};
+
+							const eventInfo = getEventDescription(
+								event.text,
+								event.impact
+							);
+
+							return (
 								<div
+									key={i}
 									style={{
-										fontSize: "1.5em",
-										marginRight: 15,
+										background: "white",
+										padding: 20,
+										borderRadius: 12,
+										display: "flex",
+										alignItems: "flex-start",
+										border: `3px solid ${
+											event.impact >= 0
+												? "#4caf50"
+												: "#ff9800"
+										}`,
+										boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
 									}}
 								>
-									{event.impact >= 0 ? "🎉" : "😅"}
-								</div>
-								<div style={{ flex: 1 }}>
 									<div
 										style={{
-											fontWeight: "bold",
-											color: "#333",
+											fontSize: "2em",
+											marginRight: 20,
+											marginTop: 5,
 										}}
 									>
-										{event.text}
+										{eventInfo.emoji}
 									</div>
-									<div
-										style={{
-											fontSize: "0.9em",
-											color:
-												event.impact >= 0
-													? "#4caf50"
-													: "#ff5722",
-										}}
-									>
-										{event.impact >= 0
-											? "This helped you!"
-											: "This was tricky, but you learned!"}
+									<div style={{ flex: 1 }}>
+										<div
+											style={{
+												fontWeight: "bold",
+												color: "#333",
+												fontSize: "1.1em",
+												marginBottom: 8,
+											}}
+										>
+											{eventInfo.title}
+										</div>
+										<div
+											style={{
+												fontSize: "0.95em",
+												color: "#555",
+												lineHeight: "1.4",
+												marginBottom: 10,
+											}}
+										>
+											{eventInfo.description}
+										</div>
+										<div
+											style={{
+												fontSize: "0.9em",
+												fontWeight: "600",
+												color:
+													event.impact >= 0
+														? "#4caf50"
+														: "#ff9800",
+												fontStyle: "italic",
+											}}
+										>
+											💡 {eventInfo.lesson}
+										</div>
 									</div>
 								</div>
-							</div>
-						))}
+							);
+						})}
 					</div>
 				</div>
 
@@ -607,7 +712,7 @@ export default function Visit() {
 										fontSize: "1.4em",
 									}}
 								>
-									Powered by RBC Investease
+									Real Bank Simulation Results
 								</h3>
 								<p
 									style={{
@@ -616,82 +721,345 @@ export default function Visit() {
 										fontSize: "0.9em",
 									}}
 								>
-									Real financial calculations from RBC Bank
+									Powered by RBC InvestEase API - Real
+									financial calculations!
 								</p>
 							</div>
 						</div>
 
-						{/* API Integration Details (for technical demo) */}
-						{showParent && timeline.rbc_investease.api_metadata && (
-							<div
-								style={{
-									background: "#ede9fe",
-									border: "2px solid #8b5cf6",
-									borderRadius: 10,
-									padding: 15,
-									marginBottom: 15,
-								}}
-							>
-								<h4
-									style={{
-										margin: "0 0 10px 0",
-										color: "#8b5cf6",
-									}}
-								>
-									🔧 API Integration Details
-								</h4>
+						{/* Portfolio Performance Results */}
+						{timeline.rbc_investease.simulation_results &&
+							timeline.rbc_investease.simulation_results
+								.results && (
 								<div
 									style={{
-										display: "grid",
-										gridTemplateColumns: "1fr 1fr",
-										gap: 10,
-										fontSize: "0.9em",
+										background: "#ede9fe",
+										border: "2px solid #8b5cf6",
+										borderRadius: 12,
+										padding: 20,
+										marginBottom: 20,
 									}}
 								>
-									<div>
-										<strong>Endpoint:</strong>
-										<br />
-										<code
+									<h4
+										style={{
+											margin: "0 0 15px 0",
+											color: "#8b5cf6",
+											display: "flex",
+											alignItems: "center",
+											gap: "10px",
+										}}
+									>
+										📊 How Your Money Performed
+									</h4>
+
+									<div style={{ display: "grid", gap: 15 }}>
+										{timeline.rbc_investease.simulation_results.results.map(
+											(result, i) => {
+												const initialAmount =
+													result.initialAmount ||
+													result.initial_amount ||
+													0;
+												const finalAmount =
+													result.finalAmount ||
+													result.final_amount ||
+													0;
+												const growth =
+													finalAmount - initialAmount;
+												const growthPercent =
+													initialAmount > 0
+														? (
+																(growth /
+																	initialAmount) *
+																100
+														  ).toFixed(1)
+														: 0;
+												const isPositive = growth >= 0;
+
+												// Map portfolio types to kid-friendly names - handle "not specified" case
+												let portfolioType =
+													result.type ||
+													result.portfolio_type ||
+													result.portfolioType ||
+													"unknown";
+
+												// Handle specific API responses that return "not specified"
+												if (
+													portfolioType ===
+														"not specified" ||
+													portfolioType === "" ||
+													portfolioType === null
+												) {
+													portfolioType = "balanced"; // Default to balanced for demo
+												}
+												const portfolioNames = {
+													conservative:
+														"🐢 Slow & Steady Turtle",
+													very_conservative:
+														"🏦 Super Safe Piggy Bank",
+													balanced:
+														"🍋 Lemonade Stand Business",
+													growth: "🚀 Rocket Ship Adventure",
+													aggressive:
+														"🐉 Dragon Treasure Quest",
+													aggressive_growth:
+														"⚡ Lightning Fast Growth",
+													unknown:
+														"� Special Investment",
+												};
+
+												const friendlyName =
+													portfolioNames[
+														portfolioType
+													] ||
+													`📈 ${portfolioType} Strategy`;
+
+												return (
+													<div
+														key={i}
+														style={{
+															background: "white",
+															border: `3px solid ${
+																isPositive
+																	? "#4caf50"
+																	: "#ff9800"
+															}`,
+															borderRadius: 10,
+															padding: 15,
+															display: "flex",
+															alignItems:
+																"center",
+															justifyContent:
+																"space-between",
+														}}
+													>
+														<div
+															style={{ flex: 1 }}
+														>
+															<div
+																style={{
+																	fontWeight:
+																		"bold",
+																	color: "#333",
+																	fontSize:
+																		"1.1em",
+																	marginBottom: 5,
+																}}
+															>
+																{friendlyName}
+															</div>
+															<div
+																style={{
+																	fontSize:
+																		"0.9em",
+																	color: "#666",
+																}}
+															>
+																Started with{" "}
+																<strong>
+																	$
+																	{initialAmount.toFixed(
+																		2
+																	)}
+																</strong>
+															</div>
+														</div>
+
+														<div
+															style={{
+																textAlign:
+																	"center",
+																padding:
+																	"0 20px",
+															}}
+														>
+															<div
+																style={{
+																	fontSize:
+																		"1.5em",
+																	color: isPositive
+																		? "#4caf50"
+																		: "#ff9800",
+																}}
+															>
+																{isPositive
+																	? "📈"
+																	: "📊"}
+															</div>
+														</div>
+
+														<div
+															style={{
+																textAlign:
+																	"right",
+																flex: 1,
+															}}
+														>
+															<div
+																style={{
+																	fontSize:
+																		"1.2em",
+																	fontWeight:
+																		"bold",
+																	color: isPositive
+																		? "#4caf50"
+																		: "#ff9800",
+																}}
+															>
+																$
+																{finalAmount.toFixed(
+																	2
+																)}
+															</div>
+															<div
+																style={{
+																	fontSize:
+																		"0.9em",
+																	color: isPositive
+																		? "#4caf50"
+																		: "#ff9800",
+																}}
+															>
+																{isPositive
+																	? "+"
+																	: ""}
+																{growth >= 0
+																	? growth.toFixed(
+																			2
+																	  )
+																	: growth.toFixed(
+																			2
+																	  )}
+																(
+																{isPositive
+																	? "+"
+																	: ""}
+																{growthPercent}
+																%)
+															</div>
+														</div>
+													</div>
+												);
+											}
+										)}
+									</div>
+
+									{/* Summary Section */}
+									<div
+										style={{
+											background: "white",
+											border: "2px solid #7c3aed",
+											borderRadius: 10,
+											padding: 15,
+											marginTop: 15,
+											textAlign: "center",
+										}}
+									>
+										<div
 											style={{
-												background: "#fff",
-												padding: "2px 6px",
-												borderRadius: 4,
+												fontWeight: "bold",
+												color: "#7c3aed",
+												marginBottom: 8,
 											}}
 										>
-											{
-												timeline.rbc_investease
-													.api_metadata.endpoint
-											}
-										</code>
-									</div>
-									<div>
-										<strong>Provider:</strong>
-										<br />
-										{
-											timeline.rbc_investease.api_metadata
-												.provider
-										}
-									</div>
-									<div>
-										<strong>Portfolios Simulated:</strong>
-										<br />
-										{
-											timeline.rbc_investease.api_metadata
-												.portfolios_simulated
-										}
-									</div>
-									<div>
-										<strong>Simulation Period:</strong>
-										<br />
-										{
-											timeline.rbc_investease.api_metadata
-												.simulation_months
-										}{" "}
-										months
+											🎯 Key Takeaway
+										</div>
+										<div
+											style={{
+												fontSize: "0.95em",
+												color: "#333",
+												lineHeight: "1.4",
+											}}
+										>
+											These results show how different
+											investment strategies perform over
+											time using real market data.
+											Remember: all investments can go up
+											or down, but historically, patient
+											investors do well!
+										</div>
 									</div>
 								</div>
-							</div>
-						)}
+							)}
+
+						{/* API Integration Details (for technical demo) - only show if no simulation results */}
+						{showParent &&
+							timeline.rbc_investease.api_metadata &&
+							(!timeline.rbc_investease.simulation_results ||
+								!timeline.rbc_investease.simulation_results
+									.results) && (
+								<div
+									style={{
+										background: "#ede9fe",
+										border: "2px solid #8b5cf6",
+										borderRadius: 10,
+										padding: 15,
+										marginBottom: 15,
+									}}
+								>
+									<h4
+										style={{
+											margin: "0 0 10px 0",
+											color: "#8b5cf6",
+										}}
+									>
+										🔧 API Integration Details
+									</h4>
+									<div
+										style={{
+											display: "grid",
+											gridTemplateColumns: "1fr 1fr",
+											gap: 10,
+											fontSize: "0.9em",
+										}}
+									>
+										<div>
+											<strong>Endpoint:</strong>
+											<br />
+											<code
+												style={{
+													background: "#fff",
+													padding: "2px 6px",
+													borderRadius: 4,
+												}}
+											>
+												{
+													timeline.rbc_investease
+														.api_metadata.endpoint
+												}
+											</code>
+										</div>
+										<div>
+											<strong>Provider:</strong>
+											<br />
+											{
+												timeline.rbc_investease
+													.api_metadata.provider
+											}
+										</div>
+										<div>
+											<strong>
+												Portfolios Simulated:
+											</strong>
+											<br />
+											{
+												timeline.rbc_investease
+													.api_metadata
+													.portfolios_simulated
+											}
+										</div>
+										<div>
+											<strong>Simulation Period:</strong>
+											<br />
+											{
+												timeline.rbc_investease
+													.api_metadata
+													.simulation_months
+											}{" "}
+											months
+										</div>
+									</div>
+								</div>
+							)}
 
 						{/* Kid Adventures Display */}
 						{timeline.kid_adventures &&

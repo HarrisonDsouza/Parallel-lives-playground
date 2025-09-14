@@ -81,7 +81,7 @@ export default function TimelineEditor() {
 							icon="sparkles"
 							style={{ marginBottom: "var(--space-4)" }}
 						>
-							Create Your Future Adventure!
+							🎮 Build Your Future Adventure! 🎮
 						</Heading>
 						<Text
 							size="xl"
@@ -89,13 +89,16 @@ export default function TimelineEditor() {
 							style={{
 								margin: 0,
 								color: "var(--color-primary-700)",
+								lineHeight: "1.6",
 							}}
 						>
-							What if you could see into the future? Let's build
-							your story and see what happens!
+							Ever wonder what happens if you make different
+							choices with money? This magical simulator shows you
+							EXACTLY what your future could look like! Make
+							choices, watch your story unfold, and see your money
+							grow in a fun 3D world!
 						</Text>
-					</div>
-
+					</div>{" "}
 					<form onSubmit={createTimeline}>
 						<div
 							style={{
@@ -126,7 +129,7 @@ export default function TimelineEditor() {
 										color="#654321"
 										size={24}
 									/>
-									What's Your Story Called?
+									🌟 Name Your Money Adventure! 🌟
 								</div>
 							</label>
 							<p
@@ -134,10 +137,13 @@ export default function TimelineEditor() {
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								Give your adventure a cool name! What's the main
-								thing you want to try?
+								What should we call your awesome money
+								adventure? Pick something that sounds exciting!
+								This will be the title of your future story that
+								our AI creates just for you!
 							</p>
 							<div
 								style={{
@@ -150,7 +156,7 @@ export default function TimelineEditor() {
 								<button
 									type="button"
 									onClick={() =>
-										setName("My Awesome Lemonade Stand")
+										setName("My Epic Lemonade Empire")
 									}
 									style={{
 										background: "#DAA520",
@@ -178,7 +184,7 @@ export default function TimelineEditor() {
 								<button
 									type="button"
 									onClick={() =>
-										setName("Saving My Allowance Adventure")
+										setName("My Super Saving Challenge")
 									}
 									style={{
 										background: "#8B4513",
@@ -206,7 +212,9 @@ export default function TimelineEditor() {
 								<button
 									type="button"
 									onClick={() =>
-										setName("My Pet Care Business")
+										setName(
+											"My Amazing Pet Business Journey"
+										)
 									}
 									style={{
 										background: "#A0522D",
@@ -242,7 +250,7 @@ export default function TimelineEditor() {
 								}}
 								value={name}
 								onChange={(e) => setName(e.target.value)}
-								placeholder="Type your adventure name here!"
+								placeholder="Type your adventure name here! (Like: The Great Cookie Business, Money Master Quest, etc.)"
 								required
 							/>
 						</div>
@@ -265,17 +273,20 @@ export default function TimelineEditor() {
 									color: "#654321",
 								}}
 							>
-								👋 What's Your Name, Future Hero?
+								👋 Hey There, Future Money Hero!
 							</label>
 							<p
 								style={{
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								This is YOUR story, so let's put your name on
-								it!
+								What should we call you in your adventure story?
+								This is YOUR journey, so let's make sure your
+								name is on it! Our AI will use this to create a
+								personalized story just for you.
 							</p>
 							<input
 								style={{
@@ -287,7 +298,7 @@ export default function TimelineEditor() {
 								}}
 								value={owner}
 								onChange={(e) => setOwner(e.target.value)}
-								placeholder="Your awesome name goes here!"
+								placeholder="Your awesome name goes here! (First name is perfect)"
 								required
 							/>
 						</div>
@@ -310,17 +321,20 @@ export default function TimelineEditor() {
 									color: "#654321",
 								}}
 							>
-								📧 Your Parent's Email
+								📧 Your Grown-Up's Email Address
 							</label>
 							<p
 								style={{
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								We'll send your grown-up updates about your
-								awesome money adventure!
+								We need to tell your parent or guardian about
+								your awesome money adventure! They'll get
+								updates about your simulation results and can
+								see how smart you are with money choices.
 							</p>
 							<input
 								type="email"
@@ -333,7 +347,7 @@ export default function TimelineEditor() {
 								}}
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								placeholder="parent@email.com"
+								placeholder="your.parent@email.com (Ask your grown-up!)"
 								required
 							/>
 						</div>
@@ -356,17 +370,21 @@ export default function TimelineEditor() {
 									color: "#654321",
 								}}
 							>
-								💰 Your Starting Money
+								💰 Your Magical Starting Money
 							</label>
 							<p
 								style={{
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								How much money do you want to start with in your
-								pretend wallet?
+								Imagine you have a magic wallet! How much
+								pretend money should we put in it to start your
+								adventure? Don't worry - this is just for the
+								simulation, but it shows how different amounts
+								can grow over time!
 							</p>
 							<div
 								style={{
@@ -418,7 +436,7 @@ export default function TimelineEditor() {
 								onChange={(e) =>
 									setCashAmount(Number(e.target.value))
 								}
-								placeholder="How much money do you want to start with?"
+								placeholder="How much magical money should we start with?"
 								min="0"
 								required
 							/>
@@ -442,18 +460,22 @@ export default function TimelineEditor() {
 									color: "#654321",
 								}}
 							>
-								🎯 How Do You Like to Save Money?
+								🎯 How Should Your Money Grow?
 							</label>
 							<p
 								style={{
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								Pick the ways you'd like to grow your money!
-								(Don't worry, our AI will figure out the best
-								options for you!)
+								Different ways of saving money work differently!
+								Pick what sounds most interesting to you. Our
+								super-smart AI will use real financial data to
+								show how your money could grow over time with
+								these choices. It's like a crystal ball for
+								money!
 							</p>
 							<div
 								style={{
@@ -464,12 +486,12 @@ export default function TimelineEditor() {
 								}}
 							>
 								{[
-									"Safe & Slow (like a piggy bank)",
-									"Medium Risk (like a lemonade stand)",
-									"Fun & Fast (like collecting trading cards)",
-									"Houses & Buildings",
-									"Cool Tech Companies",
-									"Let AI Choose for Me!",
+									"Super Safe & Steady (like a piggy bank - slow but sure!)",
+									"Balanced Adventure (like a lemonade stand - medium risk, medium reward)",
+									"Exciting & Fast (like collecting rare cards - higher risk, bigger rewards!)",
+									"Houses & Buildings (real estate investments)",
+									"Cool Tech Companies (technology stocks)",
+									"Surprise Me! (Let our AI pick the best mix for me!)",
 								].map((portfolio) => (
 									<button
 										key={portfolio}
@@ -530,7 +552,7 @@ export default function TimelineEditor() {
 											.filter(Boolean)
 									)
 								}
-								placeholder="Click buttons above or tell us your own ideas!"
+								placeholder="Click the awesome buttons above or tell us your own cool ideas!"
 							/>
 						</div>
 
@@ -563,7 +585,7 @@ export default function TimelineEditor() {
 										color="#654321"
 										size={24}
 									/>
-									What Cool Things Will You Do?
+									🎮 What Money Adventures Will You Try?
 								</div>
 							</label>
 							<p
@@ -571,11 +593,15 @@ export default function TimelineEditor() {
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								Pick the awesome choices you want to make! Each
-								choice changes your future! Click the buttons or
-								type your own (separate with commas).
+								Every choice you make changes your future! Pick
+								all the awesome things you want to try. Our AI
+								will show you exactly how each choice affects
+								your money story. Will you save up, start a
+								business, or spend on fun things? Each path
+								leads to a different adventure!
 							</p>
 
 							<div
@@ -590,42 +616,42 @@ export default function TimelineEditor() {
 								{[
 									{
 										icon: "coins",
-										text: "save money",
+										text: "save up my money",
 										color: "#DAA520",
 									},
 									{
 										icon: "store",
-										text: "lemonade stand",
+										text: "start a lemonade stand",
 										color: "#8B4513",
 									},
 									{
 										icon: "trending",
-										text: "invest",
+										text: "learn about investing",
 										color: "#A0522D",
 									},
 									{
 										icon: "gamepad",
-										text: "buy games",
+										text: "buy fun games & toys",
 										color: "#CD853F",
 									},
 									{
 										icon: "dog",
-										text: "pet sitting",
+										text: "start a pet-sitting business",
 										color: "#D2691E",
 									},
 									{
 										icon: "palette",
-										text: "sell art",
+										text: "sell my art & crafts",
 										color: "#8B4513",
 									},
 									{
 										icon: "book",
-										text: "tutoring",
+										text: "help teach other kids",
 										color: "#A0522D",
 									},
 									{
 										icon: "home",
-										text: "yard sale",
+										text: "organize a yard sale",
 										color: "#DAA520",
 									},
 								].map((choice) => (
@@ -707,7 +733,7 @@ export default function TimelineEditor() {
 								}}
 								value={choices}
 								onChange={(e) => setChoices(e.target.value)}
-								placeholder="Click buttons above or type: save money, lemonade stand, pet sitting"
+								placeholder="Click the adventure buttons above or type your own ideas: buy a bike, start a bakery, save for college..."
 								required
 							/>
 						</div>
@@ -738,7 +764,7 @@ export default function TimelineEditor() {
 									}}
 								>
 									<GameIcons.AI color="#654321" size={24} />
-									Tell Me About YOU!
+									🤖 Help Our AI Get to Know You!
 								</div>
 							</label>
 							<p
@@ -746,11 +772,14 @@ export default function TimelineEditor() {
 									fontSize: "1em",
 									color: "#654321",
 									margin: "0 0 12px 0",
+									lineHeight: "1.5",
 								}}
 							>
-								What do you love to do? What makes you special?
-								Our AI friend wants to know so it can give you
-								the best advice!
+								The cooler stuff you tell us about yourself, the
+								more awesome your adventure story will be! Our
+								AI friend will use this to create personalized
+								advice and make your simulation super realistic.
+								What makes YOU special?
 							</p>
 							<div
 								style={{
@@ -773,12 +802,27 @@ export default function TimelineEditor() {
 										size={16}
 									/>
 									<span>
-										Ideas: What animals do you love? What do
-										you like to build? What subjects are
-										fun?
+										💡 Ideas to get you started: What
+										animals do you love? What do you like to
+										build or create? What school subjects
+										are your favorites? What do you want to
+										be when you grow up? What makes you
+										laugh?
 									</span>
 								</div>
-								What do you want to be when you grow up?
+								<div
+									style={{
+										marginTop: "8px",
+										fontSize: "0.9em",
+										color: "#654321",
+									}}
+								>
+									🎯 Example: "I love dogs and want to become
+									a veterinarian! I also enjoy building with
+									Legos, playing soccer, and learning about
+									space. Math is my favorite subject and I
+									love helping my little sister."
+								</div>
 							</div>
 							<textarea
 								style={{
@@ -791,7 +835,7 @@ export default function TimelineEditor() {
 								}}
 								value={profileText}
 								onChange={(e) => setProfileText(e.target.value)}
-								placeholder="I love dogs and want to help animals! I also like building with Legos and learning about space..."
+								placeholder="I love animals and want to be a vet! I also enjoy building robots, playing basketball, and learning about science. My favorite subjects are math and art, and I love helping my friends..."
 								rows={4}
 							/>
 						</div>
@@ -818,7 +862,7 @@ export default function TimelineEditor() {
 								}}
 							>
 								<GameIcons.Timeline color="#654321" size={28} />
-								Here's What Will Happen!
+								🎬 Here's the Amazing Magic That Will Happen!
 							</h3>
 							<div
 								style={{
@@ -852,7 +896,7 @@ export default function TimelineEditor() {
 											marginBottom: 8,
 										}}
 									>
-										AI Analyzes You!
+										🤖 AI Creates Your Story!
 									</div>
 									<div
 										style={{
@@ -860,7 +904,8 @@ export default function TimelineEditor() {
 											color: "#8B4513",
 										}}
 									>
-										Learns what makes you special
+										Learns about you and makes personalized
+										adventures
 									</div>
 								</div>
 								<div
@@ -887,7 +932,7 @@ export default function TimelineEditor() {
 											marginBottom: 8,
 										}}
 									>
-										Magic Simulation!
+										⚡ Money Magic Simulation!
 									</div>
 									<div
 										style={{
@@ -895,7 +940,8 @@ export default function TimelineEditor() {
 											color: "#8B4513",
 										}}
 									>
-										Shows your future story
+										Shows your future with real financial
+										data
 									</div>
 								</div>
 								<div
@@ -922,7 +968,7 @@ export default function TimelineEditor() {
 											marginBottom: 8,
 										}}
 									>
-										3D World!
+										🏗️ Amazing 3D World!
 									</div>
 									<div
 										style={{
@@ -930,7 +976,8 @@ export default function TimelineEditor() {
 											color: "#8B4513",
 										}}
 									>
-										Your story becomes a building
+										Your story becomes a cool building you
+										can explore
 									</div>
 								</div>
 								<div
@@ -957,7 +1004,7 @@ export default function TimelineEditor() {
 											marginBottom: 8,
 										}}
 									>
-										Share & Compare!
+										👥 Share Your Epic Adventure!
 									</div>
 									<div
 										style={{
@@ -965,7 +1012,8 @@ export default function TimelineEditor() {
 											color: "#8B4513",
 										}}
 									>
-										Show friends your adventure
+										Show friends & family your awesome
+										future
 									</div>
 								</div>
 							</div>
@@ -1010,8 +1058,8 @@ export default function TimelineEditor() {
 								}}
 							>
 								{loading
-									? "🔮 Creating Your Magic Story..."
-									: "🚀 Launch My Adventure!"}
+									? "🔮 Creating Your Epic Money Adventure..."
+									: "🚀 Start My Amazing Money Adventure!"}
 							</button>
 						</div>
 					</form>
