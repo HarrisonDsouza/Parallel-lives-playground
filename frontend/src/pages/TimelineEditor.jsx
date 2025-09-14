@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import CharacterMascot from '../components/CharacterMascot';
+import GameIcon, { GameIcons, GameIconLarge } from '../components/GameIcon';
+import { Container, Card, Button, Input, Textarea, Heading, Text, Label } from '../components/ui';
 
 // Set default headers for axios
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -40,21 +41,38 @@ export default function TimelineEditor() {
   }
 
   return (
-    <div style={{maxWidth: 700, background: 'linear-gradient(135deg, #8B4513 0%, #654321 100%)', minHeight: '100vh', padding: 20}}>
-      <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
-        <div style={{textAlign: 'center', marginBottom: 30}}>
-          <h1 style={{fontSize: '2.5em', margin: 0, color: '#654321'}}>
-            🌟 Create Your Future Adventure! 🌟
-          </h1>
-          <p style={{fontSize: '1.2em', color: '#654321', margin: '10px 0'}}>
-            What if you could see into the future? Let's build your story and see what happens! ✨
-          </p>
-        </div>
+    <div style={{
+      background: 'linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary-800) 100%)', 
+      minHeight: '100vh'
+    }}>
+      <Container size="md" padding="lg">
+        <Card variant="elevated" padding="xl">
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
+            <Heading 
+              level={1} 
+              size="4xl" 
+              align="center"
+              icon="sparkles"
+              style={{ marginBottom: 'var(--space-4)' }}
+            >
+              Create Your Future Adventure!
+            </Heading>
+            <Text 
+              size="xl" 
+              align="center"
+              style={{ margin: 0, color: 'var(--color-primary-700)' }}
+            >
+              What if you could see into the future? Let's build your story and see what happens!
+            </Text>
+          </div>
         
         <form onSubmit={createTimeline}>
           <div style={{background: '#F5DEB3', border: '3px solid #DAA520', borderRadius: 15, padding: 20, marginBottom: 25}}>
             <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
-              🎬 What's Your Story Called?
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <GameIcons.Story color="#654321" size={24} />
+                What's Your Story Called?
+              </div>
             </label>
             <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               Give your adventure a cool name! What's the main thing you want to try?
@@ -62,15 +80,24 @@ export default function TimelineEditor() {
             <div style={{display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 12}}>
               <button type="button" onClick={() => setName("My Awesome Lemonade Stand")} 
                 style={{background: '#DAA520', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
-                🍋 Lemonade Stand
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <GameIcons.Business color="white" size={18} />
+                  Lemonade Stand
+                </div>
               </button>
               <button type="button" onClick={() => setName("Saving My Allowance Adventure")}
                 style={{background: '#8B4513', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
-                💰 Saving Money
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <GameIcons.Savings color="white" size={18} />
+                  Saving Money
+                </div>
               </button>
               <button type="button" onClick={() => setName("My Pet Care Business")}
                 style={{background: '#A0522D', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
-                🐕 Pet Business
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <GameIcons.Business color="white" size={18} />
+                  Pet Business
+                </div>
               </button>
             </div>
             <input 
@@ -100,7 +127,10 @@ export default function TimelineEditor() {
 
           <div style={{background: '#F5DEB3', border: '3px solid #8B4513', borderRadius: 15, padding: 20, marginBottom: 25}}>
             <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
-              🎯 What Cool Things Will You Do?
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <GameIcons.Goals color="#654321" size={24} />
+                What Cool Things Will You Do?
+              </div>
             </label>
             <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               Pick the awesome choices you want to make! Each choice changes your future! 
@@ -109,14 +139,14 @@ export default function TimelineEditor() {
             
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, marginBottom: 15}}>
               {[
-                {emoji: '💰', text: 'save money', color: '#DAA520'},
-                {emoji: '🍋', text: 'lemonade stand', color: '#8B4513'},
-                {emoji: '📈', text: 'invest', color: '#A0522D'},
-                {emoji: '🎮', text: 'buy games', color: '#CD853F'},
-                {emoji: '🐕', text: 'pet sitting', color: '#D2691E'},
-                {emoji: '🎨', text: 'sell art', color: '#8B4513'},
-                {emoji: '📚', text: 'tutoring', color: '#A0522D'},
-                {emoji: '🏪', text: 'yard sale', color: '#DAA520'}
+                {icon: 'coins', text: 'save money', color: '#DAA520'},
+                {icon: 'store', text: 'lemonade stand', color: '#8B4513'},
+                {icon: 'trending', text: 'invest', color: '#A0522D'},
+                {icon: 'gamepad', text: 'buy games', color: '#CD853F'},
+                {icon: 'dog', text: 'pet sitting', color: '#D2691E'},
+                {icon: 'palette', text: 'sell art', color: '#8B4513'},
+                {icon: 'book', text: 'tutoring', color: '#A0522D'},
+                {icon: 'home', text: 'yard sale', color: '#DAA520'}
               ].map(choice => (
                 <button 
                   key={choice.text}
@@ -138,10 +168,19 @@ export default function TimelineEditor() {
                     cursor: 'pointer',
                     fontSize: '0.9em',
                     fontWeight: 'bold',
-                    transition: 'all 0.3s'
+                    transition: 'all 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    justifyContent: 'center'
                   }}
                 >
-                  {choice.emoji} {choice.text}
+                  <GameIcon 
+                    icon={choice.icon} 
+                    size={18} 
+                    color={choices && choices.includes(choice.text) ? 'white' : choice.color} 
+                  />
+                  {choice.text}
                 </button>
               ))}
             </div>
@@ -157,14 +196,20 @@ export default function TimelineEditor() {
 
           <div style={{background: '#F5DEB3', border: '3px solid #CD853F', borderRadius: 15, padding: 20, marginBottom: 25}}>
             <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
-              🤖 Tell Me About YOU! 
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <GameIcons.AI color="#654321" size={24} />
+                Tell Me About YOU!
+              </div> 
             </label>
             <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               What do you love to do? What makes you special? Our AI friend wants to know so it can 
               give you the best advice!
             </p>
             <div style={{fontSize: '0.9em', color: '#654321', marginBottom: 12, fontStyle: 'italic'}}>
-              💡 Ideas: What animals do you love? What do you like to build? What subjects are fun? 
+              <div style={{display: 'flex', alignItems: 'flex-start', gap: '8px'}}>
+                <GameIcon icon="zap" color="#654321" size={16} />
+                <span>Ideas: What animals do you love? What do you like to build? What subjects are fun?</span>
+              </div> 
               What do you want to be when you grow up?
             </div>
             <textarea 
@@ -177,25 +222,36 @@ export default function TimelineEditor() {
           </div>
 
           <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 15, padding: 25, marginBottom: 25}}>
-            <h3 style={{margin: '0 0 20px 0', fontSize: '1.5em', color: '#654321', textAlign: 'center'}}>🎭 Here's What Will Happen!</h3>
+            <h3 style={{margin: '0 0 20px 0', fontSize: '1.5em', color: '#654321', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'}}>
+              <GameIcons.Timeline color="#654321" size={28} />
+              Here's What Will Happen!
+            </h3>
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20}}>
               <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #DAA520'}}>
-                <div style={{fontSize: '2.5em', marginBottom: 12}}>🤖</div>
+                <div style={{marginBottom: 12}}>
+                  <GameIconLarge icon="bot" color="#654321" size={40} />
+                </div>
                 <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>AI Analyzes You!</div>
                 <div style={{fontSize: '0.95em', color: '#8B4513'}}>Learns what makes you special</div>
               </div>
               <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #A0522D'}}>
-                <div style={{fontSize: '2.5em', marginBottom: 12}}>⚡</div>
+                <div style={{marginBottom: 12}}>
+                  <GameIconLarge icon="zap" color="#654321" size={40} />
+                </div>
                 <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>Magic Simulation!</div>
                 <div style={{fontSize: '0.95em', color: '#8B4513'}}>Shows your future story</div>
               </div>
               <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #CD853F'}}>
-                <div style={{fontSize: '2.5em', marginBottom: 12}}>🏗️</div>
+                <div style={{marginBottom: 12}}>
+                  <GameIconLarge icon="building" color="#654321" size={40} />
+                </div>
                 <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>3D World!</div>
                 <div style={{fontSize: '0.95em', color: '#8B4513'}}>Your story becomes a building</div>
               </div>
               <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #D2691E'}}>
-                <div style={{fontSize: '2.5em', marginBottom: 12}}>👫</div>
+                <div style={{marginBottom: 12}}>
+                  <GameIconLarge icon="users" color="#654321" size={40} />
+                </div>
                 <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>Share & Compare!</div>
                 <div style={{fontSize: '0.95em', color: '#8B4513'}}>Show friends your adventure</div>
               </div>
@@ -236,19 +292,8 @@ export default function TimelineEditor() {
             </button>
           </div>
         </form>
-      </div>
-      
-      {/* Character Mascot */}
-      <CharacterMascot 
-        action={loading ? 'working' : name && choices ? 'encouraging' : 'thinking'}
-        position="top-right"
-        message={
-          loading ? "Creating your amazing timeline story! ✨" :
-          name && choices ? "Great choices! Ready to see your future? 🚀" :
-          "Tell me about your adventure! What will you choose? 🤔"
-        }
-        autoHide={false}
-      />
+        </Card>
+      </Container>
     </div>
   );
 }

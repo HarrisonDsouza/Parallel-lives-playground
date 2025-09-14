@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import TimelineCard from '../components/TimelineCard';
-import CharacterMascot from '../components/CharacterMascot';
 import socket from '../api/socketClient';
+import GameIcon, { GameIcons, GameIconLarge } from '../components/GameIcon';
+import { Container, Card, Button, Heading, Text } from '../components/ui';
 
 const API = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api';
 
@@ -54,7 +55,11 @@ export default function Playground() {
         {/* Header Section */}
         <div style={{textAlign: 'center', marginBottom: 30, background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
           <h1 style={{fontSize: '3em', margin: 0, color: '#654321'}}>
-            🌟 Timeline Playground 🌟
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px'}}>
+              <GameIconLarge icon="sparkles" color="#654321" size={32} />
+              Timeline Playground
+              <GameIconLarge icon="sparkles" color="#654321" size={32} />
+            </div>
           </h1>
           <p style={{fontSize: '1.3em', color: '#654321', margin: '15px 0 20px 0'}}>
             Welcome to your magical world of parallel futures! Watch as your choices come to life in 3D!
@@ -64,7 +69,10 @@ export default function Playground() {
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 15, marginTop: 20}}>
             <div style={{background: '#A0522D', border: '2px solid #8B4513', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>{combined.length}</div>
-              <div style={{fontSize: '0.9em'}}>🎬 Total Adventures</div>
+              <div style={{fontSize: '0.9em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'}}>
+                <GameIcon icon="film" color="white" size={16} />
+                Total Adventures
+              </div>
             </div>
             <div style={{background: '#DAA520', border: '2px solid #B8860B', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>{localTimelines.length}</div>
@@ -87,7 +95,10 @@ export default function Playground() {
         <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 25, marginBottom: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
           <div style={{textAlign: 'center', marginBottom: 20}}>
             <h2 style={{fontSize: '2em', margin: 0, color: '#654321'}}>
-              🎭 Your Timeline Adventure Gallery
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'}}>
+                <GameIcons.Timeline color="#654321" size={24} />
+                Your Timeline Adventure Gallery
+              </div>
             </h2>
             <p style={{fontSize: '1.1em', color: '#654321', margin: '10px 0'}}>
               Watch your timelines come alive! Our magical friend shows you how awesome your choices are! ✨
@@ -128,11 +139,11 @@ export default function Playground() {
                   const success = timeline.simulated?.multiplier ?? 1;
                   const height = Math.max(40, Math.min(120, success * 40));
                   const getSuccessEmoji = (mult) => {
-                    if (mult >= 2.5) return '🌟';
-                    if (mult >= 2.0) return '🎉';
-                    if (mult >= 1.5) return '😊';
-                    if (mult >= 1.0) return '😐';
-                    return '💪';
+                    if (mult >= 2.5) return <GameIcon icon="star" color="white" size={20} />;
+                    if (mult >= 2.0) return <GameIcon icon="trophy" color="white" size={20} />;
+                    if (mult >= 1.5) return <GameIcon icon="sparkles" color="white" size={20} />;
+                    if (mult >= 1.0) return <GameIcon icon="target" color="white" size={20} />;
+                    return <GameIcon icon="zap" color="white" size={20} />;
                   };
                   
                   return (
@@ -194,10 +205,20 @@ export default function Playground() {
               }}>
                 <h3 style={{margin: '20px 0 10px 0', fontSize: '1.5em', textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>
                   {combined.filter(t => (t.simulated?.multiplier ?? 1) >= 2.0).length > combined.length / 2 
-                    ? '🎉 Wow! You\'re making amazing choices!' 
+                    ? (
+                      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}>
+                        <GameIcon icon="trophy" color="white" size={20} />
+                        <span>Wow! You're making amazing choices!</span>
+                      </div>
+                    ) 
                     : combined.filter(t => (t.simulated?.multiplier ?? 1) >= 1.5).length > 0
                     ? '😊 Great job! Keep exploring different choices!'
-                    : '💪 Every choice is a learning adventure!'}
+                    : (
+                      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}>
+                        <GameIcon icon="zap" color="white" size={20} />
+                        <span>Every choice is a learning adventure!</span>
+                      </div>
+                    )}
                 </h3>
                 <p style={{margin: 0, fontSize: '1.1em', opacity: 0.9}}>
                   You have {combined.length} timeline adventures! Each one shows what happens with different choices.
@@ -228,7 +249,9 @@ export default function Playground() {
               borderRadius: 15, 
               color: '#654321'
             }}>
-              <div style={{fontSize: '5em', marginBottom: 20}}>🎭</div>
+              <div style={{marginBottom: 20}}>
+                <GameIconLarge icon="palette" color="#654321" size={60} />
+              </div>
               <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em', color: '#654321'}}>Your Adventure Gallery is Empty!</h3>
               <p style={{margin: '0 0 25px 0', fontSize: '1.2em', color: '#8B4513'}}>
                 Create your first timeline and watch the magic happen!
@@ -241,7 +264,10 @@ export default function Playground() {
         <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
           <div style={{textAlign: 'center', marginBottom: 25}}>
             <h2 style={{fontSize: '2em', margin: 0, color: '#654321'}}>
-              🎭 Your Timeline Adventures
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px'}}>
+                <GameIcons.Timeline color="#654321" size={24} />
+                Your Timeline Adventures
+              </div>
             </h2>
             <p style={{fontSize: '1.1em', color: '#654321', margin: '10px 0 20px 0'}}>
               Click on any timeline to visit that parallel world and see what happened!
@@ -250,7 +276,10 @@ export default function Playground() {
             {/* Filter/Sort Options */}
             <div style={{display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap'}}>
               <button style={{background: '#8B4513', color: 'white', border: 'none', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
-                🌟 All Stories
+                <div style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                  <GameIcon icon="star" color="white" size={16} />
+                  All Stories
+                </div>
               </button>
               <button style={{background: '#F5DEB3', color: '#654321', border: '2px solid #8B4513', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
                 🏠 My Stories
@@ -271,7 +300,9 @@ export default function Playground() {
             </div>
           ) : (
             <div style={{textAlign: 'center', padding: 60, background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 15, color: '#654321'}}>
-              <div style={{fontSize: '5em', marginBottom: 20}}>🎬</div>
+              <div style={{marginBottom: 20}}>
+                <GameIconLarge icon="film" color="#654321" size={60} />
+              </div>
               <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em', color: '#654321'}}>Ready to Start Your Adventure?</h3>
               <p style={{margin: '0 0 25px 0', fontSize: '1.2em', color: '#8B4513'}}>
                 Create your first timeline and watch your choices come to life!
@@ -300,7 +331,10 @@ export default function Playground() {
                   e.target.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
                 }}
               >
-                🚀 Create My First Timeline!
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <GameIcon icon="sparkles" color="white" size={18} />
+                  Create My First Timeline!
+                </div>
               </button>
             </div>
           )}
@@ -309,7 +343,10 @@ export default function Playground() {
         {/* Fun Tips Section */}
         {combined.length > 0 && (
           <div style={{background: 'linear-gradient(45deg, #DAA520, #B8860B)', color: 'white', borderRadius: 20, padding: 25, marginTop: 25, textAlign: 'center'}}>
-            <h3 style={{margin: '0 0 15px 0', fontSize: '1.5em'}}>🎭 Pro Tips for Timeline Explorers!</h3>
+            <h3 style={{margin: '0 0 15px 0', fontSize: '1.5em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
+              <GameIcon icon="palette" color="white" size={24} />
+              Pro Tips for Timeline Explorers!
+            </h3>
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20}}>
               <div>
                 <div style={{fontSize: '2em', marginBottom: 8}}>🎯</div>
@@ -330,18 +367,6 @@ export default function Playground() {
           </div>
         )}
       </div>
-      
-      {/* Character Mascot */}
-      <CharacterMascot 
-        action={combined.length === 0 ? 'encouraging' : combined.length > 3 ? 'celebrating' : 'waving'}
-        position="bottom-right"
-        message={
-          combined.length === 0 ? "Hi there! Ready to create your first timeline adventure? 🚀" :
-          combined.length > 3 ? "Wow! You're creating so many amazing timelines! 🎉" :
-          "Looking great! Keep exploring different choices! ✨"
-        }
-        duration={4000}
-      />
     </div>
   );
 }
