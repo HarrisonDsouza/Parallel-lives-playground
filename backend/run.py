@@ -2,9 +2,10 @@
 
 import os
 import sys
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from src.services.aws_client import simulate_client_with_aws
 from dotenv import load_dotenv
 
 # Add src to path
@@ -24,6 +25,11 @@ from src.routes.social import social_bp
 # Register blueprints
 app.register_blueprint(timelines_bp, url_prefix='/api/timelines')
 app.register_blueprint(social_bp, url_prefix='/api/social')
+
+@app.route("/api/simulate")
+def simulate():
+    result = simulate_client_with_aws()
+    return jsonify(result), result.get("status_code", 500)
 
 @app.route('/health')
 def health():
