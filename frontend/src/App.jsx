@@ -21,6 +21,7 @@ export default function App() {
             <Link to="/">Home</Link>
             <Link to="/playground">Playground</Link>
             <Link to="/editor">Create Timeline</Link>
+            <Link to="/rewards">🎁 Rewards</Link>
             <Link to="/goose">🦆 Goose Showcase</Link>
           </nav>
         ) : (
@@ -28,6 +29,7 @@ export default function App() {
             <Link to="/">Home</Link>
             <Link to="/playground">Playground</Link>
             <Link to="/editor">Create Timeline</Link>
+            <Link to="/rewards">🎁 Rewards</Link>
             <Link to="/goose">🦆 Goose Showcase</Link>
           </nav>
         )}

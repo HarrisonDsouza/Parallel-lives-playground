@@ -7,6 +7,7 @@ import Playground from './pages/Playground';
 import TimelineEditor from './pages/TimelineEditor';
 import Visit from './pages/Visit';
 import GooseShowcase from './components/GooseShowcase';
+import Rewards from './pages/Rewards';
 import './styles.css';
 
 createRoot(document.getElementById('root')).render(
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="editor" element={<TimelineEditor />} />
           <Route path="visit/:id" element={<Visit />} />
           <Route path="goose" element={<GooseShowcase />} />
+          <Route path="rewards" element={<Rewards />} />
         </Route>
       </Routes>
     </BrowserRouter>
