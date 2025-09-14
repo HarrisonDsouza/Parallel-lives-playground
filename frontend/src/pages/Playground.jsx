@@ -48,33 +48,33 @@ export default function Playground() {
     .slice(0, 20);
 
   return (
-    <div style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh', padding: 20}}>
+    <div style={{background: 'linear-gradient(135deg, #8B4513 0%, #654321 100%)', minHeight: '100vh', padding: 20}}>
       <div style={{maxWidth: 1200, margin: '0 auto'}}>
         
         {/* Header Section */}
-        <div style={{textAlign: 'center', marginBottom: 30, background: 'white', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
-          <h1 style={{fontSize: '3em', margin: 0, background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+        <div style={{textAlign: 'center', marginBottom: 30, background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
+          <h1 style={{fontSize: '3em', margin: 0, color: '#654321'}}>
             🌟 Timeline Playground 🌟
           </h1>
-          <p style={{fontSize: '1.3em', color: '#666', margin: '15px 0 20px 0'}}>
+          <p style={{fontSize: '1.3em', color: '#654321', margin: '15px 0 20px 0'}}>
             Welcome to your magical world of parallel futures! Watch as your choices come to life in 3D!
           </p>
           
           {/* Stats Bar */}
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 15, marginTop: 20}}>
-            <div style={{background: 'linear-gradient(45deg, #ff6b6b, #feca57)', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
+            <div style={{background: '#A0522D', border: '2px solid #8B4513', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>{combined.length}</div>
               <div style={{fontSize: '0.9em'}}>🎬 Total Adventures</div>
             </div>
-            <div style={{background: 'linear-gradient(45deg, #48dbfb, #0abde3)', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
+            <div style={{background: '#DAA520', border: '2px solid #B8860B', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>{localTimelines.length}</div>
               <div style={{fontSize: '0.9em'}}>🏠 Your Stories</div>
             </div>
-            <div style={{background: 'linear-gradient(45deg, #1dd1a1, #10ac84)', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
+            <div style={{background: '#CD853F', border: '2px solid #A0522D', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>{timelines.length}</div>
               <div style={{fontSize: '0.9em'}}>👫 Shared Stories</div>
             </div>
-            <div style={{background: 'linear-gradient(45deg, #feca57, #ff9ff3)', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
+            <div style={{background: '#D2691E', border: '2px solid #A0522D', color: 'white', padding: '15px', borderRadius: 15, textAlign: 'center'}}>
               <div style={{fontSize: '2em', fontWeight: 'bold'}}>
                 {combined.length > 0 ? Math.round(combined.reduce((sum, t) => sum + (t.simulated?.multiplier || 1), 0) / combined.length * 10) / 10 : 0}
               </div>
@@ -84,19 +84,19 @@ export default function Playground() {
         </div>
 
         {/* Character Showcase Section */}
-        <div style={{background: 'white', borderRadius: 20, padding: 25, marginBottom: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
+        <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 25, marginBottom: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
           <div style={{textAlign: 'center', marginBottom: 20}}>
-            <h2 style={{fontSize: '2em', margin: 0, background: 'linear-gradient(45deg, #667eea, #764ba2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+            <h2 style={{fontSize: '2em', margin: 0, color: '#654321'}}>
               🎭 Your Timeline Adventure Gallery
             </h2>
-            <p style={{fontSize: '1.1em', color: '#666', margin: '10px 0'}}>
+            <p style={{fontSize: '1.1em', color: '#654321', margin: '10px 0'}}>
               Watch your timelines come alive! Our magical friend shows you how awesome your choices are! ✨
             </p>
           </div>
           
           {combined.length > 0 ? (
             <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #8B4513 0%, #654321 100%)',
               borderRadius: 15,
               padding: 30,
               minHeight: 300,
@@ -223,13 +223,14 @@ export default function Playground() {
             <div style={{
               textAlign: 'center', 
               padding: 60, 
-              background: 'linear-gradient(135deg, #667eea, #764ba2)', 
+              background: '#F5DEB3',
+              border: '4px solid #8B4513', 
               borderRadius: 15, 
-              color: 'white'
+              color: '#654321'
             }}>
               <div style={{fontSize: '5em', marginBottom: 20}}>🎭</div>
-              <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em'}}>Your Adventure Gallery is Empty!</h3>
-              <p style={{margin: '0 0 25px 0', fontSize: '1.2em', opacity: 0.9}}>
+              <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em', color: '#654321'}}>Your Adventure Gallery is Empty!</h3>
+              <p style={{margin: '0 0 25px 0', fontSize: '1.2em', color: '#8B4513'}}>
                 Create your first timeline and watch the magic happen!
               </p>
             </div>
@@ -237,24 +238,24 @@ export default function Playground() {
         </div>
 
         {/* Timeline Cards Section */}
-        <div style={{background: 'white', borderRadius: 20, padding: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
+        <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 25, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
           <div style={{textAlign: 'center', marginBottom: 25}}>
-            <h2 style={{fontSize: '2em', margin: 0, background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+            <h2 style={{fontSize: '2em', margin: 0, color: '#654321'}}>
               🎭 Your Timeline Adventures
             </h2>
-            <p style={{fontSize: '1.1em', color: '#666', margin: '10px 0 20px 0'}}>
+            <p style={{fontSize: '1.1em', color: '#654321', margin: '10px 0 20px 0'}}>
               Click on any timeline to visit that parallel world and see what happened!
             </p>
             
             {/* Filter/Sort Options */}
             <div style={{display: 'flex', justifyContent: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap'}}>
-              <button style={{background: '#4caf50', color: 'white', border: 'none', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
+              <button style={{background: '#8B4513', color: 'white', border: 'none', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
                 🌟 All Stories
               </button>
-              <button style={{background: '#e0e0e0', color: '#666', border: 'none', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
+              <button style={{background: '#F5DEB3', color: '#654321', border: '2px solid #8B4513', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
                 🏠 My Stories
               </button>
-              <button style={{background: '#e0e0e0', color: '#666', border: 'none', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
+              <button style={{background: '#F5DEB3', color: '#654321', border: '2px solid #8B4513', padding: '10px 20px', borderRadius: 25, cursor: 'pointer'}}>
                 👫 Friends' Stories
               </button>
             </div>
@@ -269,16 +270,16 @@ export default function Playground() {
               ))}
             </div>
           ) : (
-            <div style={{textAlign: 'center', padding: 60, background: 'linear-gradient(135deg, #667eea, #764ba2)', borderRadius: 15, color: 'white'}}>
+            <div style={{textAlign: 'center', padding: 60, background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 15, color: '#654321'}}>
               <div style={{fontSize: '5em', marginBottom: 20}}>🎬</div>
-              <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em'}}>Ready to Start Your Adventure?</h3>
-              <p style={{margin: '0 0 25px 0', fontSize: '1.2em', opacity: 0.9}}>
+              <h3 style={{margin: '0 0 15px 0', fontSize: '1.8em', color: '#654321'}}>Ready to Start Your Adventure?</h3>
+              <p style={{margin: '0 0 25px 0', fontSize: '1.2em', color: '#8B4513'}}>
                 Create your first timeline and watch your choices come to life!
               </p>
               <button 
                 onClick={() => window.location.href = '/editor'}
                 style={{
-                  background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                  background: 'linear-gradient(45deg, #DAA520, #B8860B)',
                   color: 'white',
                   border: 'none',
                   padding: '15px 30px',
@@ -307,7 +308,7 @@ export default function Playground() {
 
         {/* Fun Tips Section */}
         {combined.length > 0 && (
-          <div style={{background: 'linear-gradient(45deg, #feca57, #ff9ff3)', color: 'white', borderRadius: 20, padding: 25, marginTop: 25, textAlign: 'center'}}>
+          <div style={{background: 'linear-gradient(45deg, #DAA520, #B8860B)', color: 'white', borderRadius: 20, padding: 25, marginTop: 25, textAlign: 'center'}}>
             <h3 style={{margin: '0 0 15px 0', fontSize: '1.5em'}}>🎭 Pro Tips for Timeline Explorers!</h3>
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 20}}>
               <div>

@@ -20,11 +20,11 @@ export default function Visit() {
 
   // Convert multiplier to kid-friendly metrics
   const getSuccessLevel = (mult) => {
-    if (mult >= 2.5) return {level: 'AMAZING', emoji: '🌟', color: '#28a745', description: 'Super Successful!'};
-    if (mult >= 2.0) return {level: 'GREAT', emoji: '🎉', color: '#20c997', description: 'Really Good!'};
-    if (mult >= 1.5) return {level: 'GOOD', emoji: '😊', color: '#ffc107', description: 'Pretty Good!'};
-    if (mult >= 1.0) return {level: 'OKAY', emoji: '😐', color: '#fd7e14', description: 'Could Be Better'};
-    return {level: 'TOUGH', emoji: '😔', color: '#dc3545', description: 'Needs Some Help'};
+    if (mult >= 2.5) return {level: 'AMAZING', emoji: '🌟', color: '#DAA520', description: 'Super Successful!'};
+    if (mult >= 2.0) return {level: 'GREAT', emoji: '🎉', color: '#A0522D', description: 'Really Good!'};
+    if (mult >= 1.5) return {level: 'GOOD', emoji: '😊', color: '#8B4513', description: 'Pretty Good!'};
+    if (mult >= 1.0) return {level: 'OKAY', emoji: '😐', color: '#CD853F', description: 'Could Be Better'};
+    return {level: 'TOUGH', emoji: '😔', color: '#D2691E', description: 'Needs Some Help'};
   };
 
   const success = getSuccessLevel(simulated.multiplier);
@@ -32,15 +32,15 @@ export default function Visit() {
   const happinessBars = Math.max(1, Math.min(10, Math.round(simulated.emotional * 10)));
 
   return (
-    <div style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh', padding: 20}}>
-      <div style={{maxWidth: 800, margin: '0 auto', background: 'white', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
+    <div style={{background: 'linear-gradient(135deg, #8B4513 0%, #654321 100%)', minHeight: '100vh', padding: 20}}>
+      <div style={{maxWidth: 800, margin: '0 auto', background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
         
         {/* Header */}
         <div style={{textAlign: 'center', marginBottom: 30}}>
-          <h1 style={{fontSize: '2.5em', margin: 0, background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+          <h1 style={{fontSize: '2.5em', margin: 0, color: '#654321'}}>
             🎬 {name}
           </h1>
-          <p style={{fontSize: '1.2em', color: '#666', margin: '10px 0'}}>
+          <p style={{fontSize: '1.2em', color: '#654321', margin: '10px 0'}}>
             {owner}'s Future Adventure Story! ✨
           </p>
         </div>
@@ -202,7 +202,7 @@ export default function Visit() {
         )}
 
         {/* Fun Facts */}
-        <div style={{background: 'linear-gradient(45deg, #667eea, #764ba2)', color: 'white', borderRadius: 15, padding: 20, textAlign: 'center'}}>
+        <div style={{background: 'linear-gradient(45deg, #8B4513, #654321)', color: 'white', borderRadius: 15, padding: 20, textAlign: 'center'}}>
           <h3 style={{margin: '0 0 10px 0'}}>🎭 Fun Fact!</h3>
           <p style={{margin: 0, fontSize: '1.1em'}}>
             {simulated.multiplier >= 2.0 ? 

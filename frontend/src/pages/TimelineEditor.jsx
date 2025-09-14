@@ -40,41 +40,41 @@ export default function TimelineEditor() {
   }
 
   return (
-    <div style={{maxWidth: 700, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh', padding: 20}}>
-      <div style={{background: 'white', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
+    <div style={{maxWidth: 700, background: 'linear-gradient(135deg, #8B4513 0%, #654321 100%)', minHeight: '100vh', padding: 20}}>
+      <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 20, padding: 30, boxShadow: '0 10px 30px rgba(0,0,0,0.2)'}}>
         <div style={{textAlign: 'center', marginBottom: 30}}>
-          <h1 style={{fontSize: '2.5em', margin: 0, background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
+          <h1 style={{fontSize: '2.5em', margin: 0, color: '#654321'}}>
             🌟 Create Your Future Adventure! 🌟
           </h1>
-          <p style={{fontSize: '1.2em', color: '#666', margin: '10px 0'}}>
+          <p style={{fontSize: '1.2em', color: '#654321', margin: '10px 0'}}>
             What if you could see into the future? Let's build your story and see what happens! ✨
           </p>
         </div>
         
         <form onSubmit={createTimeline}>
-          <div style={{background: '#fff3cd', border: '3px solid #ffc107', borderRadius: 15, padding: 20, marginBottom: 25}}>
-            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#856404'}}>
+          <div style={{background: '#F5DEB3', border: '3px solid #DAA520', borderRadius: 15, padding: 20, marginBottom: 25}}>
+            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
               🎬 What's Your Story Called?
             </label>
-            <p style={{fontSize: '1em', color: '#856404', margin: '0 0 12px 0'}}>
+            <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               Give your adventure a cool name! What's the main thing you want to try?
             </p>
             <div style={{display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 12}}>
               <button type="button" onClick={() => setName("My Awesome Lemonade Stand")} 
-                style={{background: '#ffc107', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer'}}>
+                style={{background: '#DAA520', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
                 🍋 Lemonade Stand
               </button>
               <button type="button" onClick={() => setName("Saving My Allowance Adventure")}
-                style={{background: '#17a2b8', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
+                style={{background: '#8B4513', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
                 💰 Saving Money
               </button>
               <button type="button" onClick={() => setName("My Pet Care Business")}
-                style={{background: '#28a745', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
+                style={{background: '#A0522D', border: 'none', padding: '8px 12px', borderRadius: 20, cursor: 'pointer', color: 'white'}}>
                 🐕 Pet Business
               </button>
             </div>
             <input 
-              style={{width: '100%', padding: 15, border: '2px solid #ffc107', borderRadius: 10, fontSize: '1.1em'}}
+              style={{width: '100%', padding: 15, border: '2px solid #DAA520', borderRadius: 10, fontSize: '1.1em'}}
               value={name} 
               onChange={e => setName(e.target.value)} 
               placeholder="Type your adventure name here!"
@@ -82,15 +82,15 @@ export default function TimelineEditor() {
             />
           </div>
 
-          <div style={{background: '#d4edda', border: '3px solid #28a745', borderRadius: 15, padding: 20, marginBottom: 25}}>
-            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#155724'}}>
+          <div style={{background: '#F5DEB3', border: '3px solid #A0522D', borderRadius: 15, padding: 20, marginBottom: 25}}>
+            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
               👋 What's Your Name, Future Hero?
             </label>
-            <p style={{fontSize: '1em', color: '#155724', margin: '0 0 12px 0'}}>
+            <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               This is YOUR story, so let's put your name on it!
             </p>
             <input 
-              style={{width: '100%', padding: 15, border: '2px solid #28a745', borderRadius: 10, fontSize: '1.1em'}}
+              style={{width: '100%', padding: 15, border: '2px solid #A0522D', borderRadius: 10, fontSize: '1.1em'}}
               value={owner} 
               onChange={e => setOwner(e.target.value)}
               placeholder="Your awesome name goes here!"
@@ -98,25 +98,25 @@ export default function TimelineEditor() {
             />
           </div>
 
-          <div style={{background: '#d1ecf1', border: '3px solid #17a2b8', borderRadius: 15, padding: 20, marginBottom: 25}}>
-            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#0c5460'}}>
+          <div style={{background: '#F5DEB3', border: '3px solid #8B4513', borderRadius: 15, padding: 20, marginBottom: 25}}>
+            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
               🎯 What Cool Things Will You Do?
             </label>
-            <p style={{fontSize: '1em', color: '#0c5460', margin: '0 0 12px 0'}}>
+            <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               Pick the awesome choices you want to make! Each choice changes your future! 
               Click the buttons or type your own (separate with commas).
             </p>
             
             <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10, marginBottom: 15}}>
               {[
-                {emoji: '💰', text: 'save money', color: '#28a745'},
-                {emoji: '🍋', text: 'lemonade stand', color: '#ffc107'},
-                {emoji: '📈', text: 'invest', color: '#6f42c1'},
-                {emoji: '🎮', text: 'buy games', color: '#dc3545'},
-                {emoji: '🐕', text: 'pet sitting', color: '#fd7e14'},
-                {emoji: '🎨', text: 'sell art', color: '#e83e8c'},
-                {emoji: '📚', text: 'tutoring', color: '#20c997'},
-                {emoji: '🏪', text: 'yard sale', color: '#6c757d'}
+                {emoji: '💰', text: 'save money', color: '#DAA520'},
+                {emoji: '🍋', text: 'lemonade stand', color: '#8B4513'},
+                {emoji: '📈', text: 'invest', color: '#A0522D'},
+                {emoji: '🎮', text: 'buy games', color: '#CD853F'},
+                {emoji: '🐕', text: 'pet sitting', color: '#D2691E'},
+                {emoji: '🎨', text: 'sell art', color: '#8B4513'},
+                {emoji: '📚', text: 'tutoring', color: '#A0522D'},
+                {emoji: '🏪', text: 'yard sale', color: '#DAA520'}
               ].map(choice => (
                 <button 
                   key={choice.text}
@@ -147,7 +147,7 @@ export default function TimelineEditor() {
             </div>
             
             <input 
-              style={{width: '100%', padding: 15, border: '2px solid #17a2b8', borderRadius: 10, fontSize: '1.1em'}}
+              style={{width: '100%', padding: 15, border: '2px solid #8B4513', borderRadius: 10, fontSize: '1.1em'}}
               value={choices} 
               onChange={e => setChoices(e.target.value)} 
               placeholder="Click buttons above or type: save money, lemonade stand, pet sitting"
@@ -155,20 +155,20 @@ export default function TimelineEditor() {
             />
           </div>
 
-          <div style={{background: '#f8d7da', border: '3px solid #dc3545', borderRadius: 15, padding: 20, marginBottom: 25}}>
-            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#721c24'}}>
+          <div style={{background: '#F5DEB3', border: '3px solid #CD853F', borderRadius: 15, padding: 20, marginBottom: 25}}>
+            <label style={{display: 'block', fontSize: '1.3em', fontWeight: 'bold', marginBottom: 10, color: '#654321'}}>
               🤖 Tell Me About YOU! 
             </label>
-            <p style={{fontSize: '1em', color: '#721c24', margin: '0 0 12px 0'}}>
+            <p style={{fontSize: '1em', color: '#654321', margin: '0 0 12px 0'}}>
               What do you love to do? What makes you special? Our AI friend wants to know so it can 
               give you the best advice!
             </p>
-            <div style={{fontSize: '0.9em', color: '#721c24', marginBottom: 12, fontStyle: 'italic'}}>
+            <div style={{fontSize: '0.9em', color: '#654321', marginBottom: 12, fontStyle: 'italic'}}>
               💡 Ideas: What animals do you love? What do you like to build? What subjects are fun? 
               What do you want to be when you grow up?
             </div>
             <textarea 
-              style={{width: '100%', padding: 15, border: '2px solid #dc3545', borderRadius: 10, fontSize: '1.1em', resize: 'vertical'}}
+              style={{width: '100%', padding: 15, border: '2px solid #CD853F', borderRadius: 10, fontSize: '1.1em', resize: 'vertical'}}
               value={profileText} 
               onChange={e => setProfileText(e.target.value)} 
               placeholder="I love dogs and want to help animals! I also like building with Legos and learning about space..."
@@ -176,28 +176,28 @@ export default function TimelineEditor() {
             />
           </div>
 
-          <div style={{background: 'linear-gradient(45deg, #667eea, #764ba2)', color: 'white', borderRadius: 15, padding: 20, marginBottom: 25}}>
-            <h3 style={{margin: '0 0 15px 0', fontSize: '1.4em'}}>🎭 Here's What Will Happen!</h3>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 15}}>
-              <div style={{textAlign: 'center'}}>
-                <div style={{fontSize: '2em', marginBottom: 8}}>🤖</div>
-                <div style={{fontWeight: 'bold'}}>AI Analyzes You!</div>
-                <div style={{fontSize: '0.9em'}}>Learns what makes you special</div>
+          <div style={{background: '#F5DEB3', border: '4px solid #8B4513', borderRadius: 15, padding: 25, marginBottom: 25}}>
+            <h3 style={{margin: '0 0 20px 0', fontSize: '1.5em', color: '#654321', textAlign: 'center'}}>🎭 Here's What Will Happen!</h3>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20}}>
+              <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #DAA520'}}>
+                <div style={{fontSize: '2.5em', marginBottom: 12}}>🤖</div>
+                <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>AI Analyzes You!</div>
+                <div style={{fontSize: '0.95em', color: '#8B4513'}}>Learns what makes you special</div>
               </div>
-              <div style={{textAlign: 'center'}}>
-                <div style={{fontSize: '2em', marginBottom: 8}}>⚡</div>
-                <div style={{fontWeight: 'bold'}}>Magic Simulation!</div>
-                <div style={{fontSize: '0.9em'}}>Shows your future story</div>
+              <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #A0522D'}}>
+                <div style={{fontSize: '2.5em', marginBottom: 12}}>⚡</div>
+                <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>Magic Simulation!</div>
+                <div style={{fontSize: '0.95em', color: '#8B4513'}}>Shows your future story</div>
               </div>
-              <div style={{textAlign: 'center'}}>
-                <div style={{fontSize: '2em', marginBottom: 8}}>🏗️</div>
-                <div style={{fontWeight: 'bold'}}>3D World!</div>
-                <div style={{fontSize: '0.9em'}}>Your story becomes a building</div>
+              <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #CD853F'}}>
+                <div style={{fontSize: '2.5em', marginBottom: 12}}>🏗️</div>
+                <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>3D World!</div>
+                <div style={{fontSize: '0.95em', color: '#8B4513'}}>Your story becomes a building</div>
               </div>
-              <div style={{textAlign: 'center'}}>
-                <div style={{fontSize: '2em', marginBottom: 8}}>👫</div>
-                <div style={{fontWeight: 'bold'}}>Share & Compare!</div>
-                <div style={{fontSize: '0.9em'}}>Show friends your adventure</div>
+              <div style={{textAlign: 'center', background: 'rgba(139, 69, 19, 0.1)', padding: 15, borderRadius: 12, border: '2px solid #D2691E'}}>
+                <div style={{fontSize: '2.5em', marginBottom: 12}}>👫</div>
+                <div style={{fontWeight: 'bold', color: '#654321', fontSize: '1.1em', marginBottom: 8}}>Share & Compare!</div>
+                <div style={{fontSize: '0.95em', color: '#8B4513'}}>Show friends your adventure</div>
               </div>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function TimelineEditor() {
               type="submit" 
               disabled={loading}
               style={{
-                background: loading ? '#ccc' : 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                background: loading ? '#ccc' : 'linear-gradient(45deg, #DAA520, #B8860B)',
                 color: 'white',
                 border: 'none',
                 padding: '20px 40px',
