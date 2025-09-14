@@ -13,6 +13,7 @@ import requests
 import json
 from src.config import Config
 
+
 class InvesteaseClient:
     def __init__(self):
         self.base_url = Config.INVESTEASE_API_ENDPOINT.replace('/clients', '')
@@ -29,7 +30,8 @@ class InvesteaseClient:
         POST /clients
         """
         try:
-            print(f"Creating Investease client: {client_data.get('name', 'Unknown')}")
+            print(
+                f"Creating Investease client: {client_data.get('name', 'Unknown')}")
 
             if not self.jwt_token:
                 return {
@@ -60,7 +62,8 @@ class InvesteaseClient:
 
             if response.status_code in [200, 201]:
                 client_result = response.json()
-                print(f"✅ Client created successfully: {client_result.get('id', 'unknown')}")
+                print(
+                    f"✅ Client created successfully: {client_result.get('id', 'unknown')}")
                 return {
                     'success': True,
                     'data': client_result,
@@ -85,7 +88,8 @@ class InvesteaseClient:
         Available types: aggressive_growth, growth, balanced, conservative, very_conservative
         """
         try:
-            print(f"Creating {portfolio_type} portfolio for client {client_id} with ${initial_amount}")
+            print(
+                f"Creating {portfolio_type} portfolio for client {client_id} with ${initial_amount}")
 
             payload = {
                 'type': portfolio_type,
@@ -103,7 +107,8 @@ class InvesteaseClient:
 
             if response.status_code in [200, 201]:
                 portfolio_result = response.json()
-                print(f"✅ {portfolio_type} portfolio created: {portfolio_result.get('id', 'unknown')}")
+                print(
+                    f"✅ {portfolio_type} portfolio created: {portfolio_result.get('id', 'unknown')}")
                 return {
                     'success': True,
                     'data': portfolio_result,
@@ -127,7 +132,8 @@ class InvesteaseClient:
         POST /client/{clientId}/simulate
         """
         try:
-            print(f"Simulating portfolios for client {client_id} for {months} months")
+            print(
+                f"Simulating portfolios for client {client_id} for {months} months")
 
             payload = {
                 'months': min(months, 12)  # API limit is 12 months
@@ -144,7 +150,8 @@ class InvesteaseClient:
 
             if response.status_code == 200:
                 simulation_result = response.json()
-                print(f"✅ Portfolio simulation completed: {len(simulation_result.get('results', []))} portfolios")
+                print(
+                    f"✅ Portfolio simulation completed: {len(simulation_result.get('results', []))} portfolios")
                 return {
                     'success': True,
                     'data': simulation_result,
@@ -161,6 +168,75 @@ class InvesteaseClient:
 
         except Exception as e:
             return self._handle_exception(e, "simulate_client_portfolios")
+
+    def list_clients(self):
+        """
+        List all clients in the team
+        GET /clients
+        """
+        try:
+            response = requests.get(
+                f"{self.base_url}/clients",
+                headers=self.headers,
+                timeout=30
+            )
+
+            if response.status_code == 200:
+                return {
+                    'success': True,
+                    'data': response.json(),
+                    'status_code': response.status_code
+                }
+            else:
+                error_data = self._parse_error(response)
+                return {
+                    'success': False,
+                    'error': error_data,
+                    'status_code': response.status_code
+                }
+
+        except Exception as e:
+            return self._handle_exception(e, "list_clients")
+
+    def find_client_by_email(self, email):
+        """
+        Find an existing client by email address
+        Returns the client data if found, None if not found
+        """
+        try:
+            print(f"🔍 Looking for existing client with email: {email}")
+
+            clients_response = self.list_clients()
+            if not clients_response['success']:
+                print(
+                    f"❌ Failed to list clients: {clients_response.get('error', 'Unknown error')}")
+                return None
+
+            clients = clients_response['data']
+
+            # Handle both list format and object format responses
+            if isinstance(clients, dict) and 'clients' in clients:
+                clients = clients['clients']
+            elif isinstance(clients, dict) and 'data' in clients:
+                clients = clients['data']
+
+            if not isinstance(clients, list):
+                print(
+                    f"⚠️ Unexpected clients response format: {type(clients)}")
+                return None
+
+            for client in clients:
+                if client.get('email') == email:
+                    print(
+                        f"✅ Found existing client: {client.get('name', 'Unknown')} (ID: {client.get('id')})")
+                    return client
+
+            print(f"📭 No existing client found with email: {email}")
+            return None
+
+        except Exception as e:
+            print(f"❌ Error searching for client by email: {str(e)}")
+            return None
 
     def get_client(self, client_id):
         """
@@ -193,32 +269,52 @@ class InvesteaseClient:
 
     def create_complete_client_with_portfolios(self, client_data, portfolio_configs=None):
         """
-        Complete pipeline: Create client + portfolios + simulate
-        This is the main method for the full Investease integration
+        Complete pipeline: Find existing client OR create new + portfolios + simulate
+        This method now checks for existing clients by email to avoid duplicates
         """
         try:
-            print(f"=== COMPLETE INVESTEASE CLIENT CREATION ===")
-            print(f"Creating client and portfolios for: {client_data.get('name', 'Unknown')}")
+            print(f"=== COMPLETE INVESTEASE CLIENT PIPELINE ===")
+            print(
+                f"Processing client: {client_data.get('name', 'Unknown')} ({client_data.get('email', 'no-email')})")
 
-            # Step 1: Create client
-            client_result = self.create_client(client_data)
-            if not client_result['success']:
-                return client_result
+            # Step 1: Check for existing client by email
+            email = client_data.get('email')
+            existing_client = None
+            client_id = None
 
-            client_info = client_result['data']
-            client_id = client_info['id']
-            print(f"✅ Client created with ID: {client_id}")
+            if email:
+                existing_client = self.find_client_by_email(email)
+
+            if existing_client:
+                # Use existing client
+                client_id = existing_client['id']
+                client_info = existing_client
+                print(f"🔄 Reusing existing client with ID: {client_id}")
+            else:
+                # Create new client
+                print(f"➕ Creating new client...")
+                client_result = self.create_client(client_data)
+                if not client_result['success']:
+                    return client_result
+
+                client_info = client_result['data']
+                client_id = client_info['id']
+                print(f"✅ New client created with ID: {client_id}")
 
             # Step 2: Create portfolios based on user data or defaults
             if portfolio_configs is None:
                 # Create portfolios based on user preferences or defaults
-                total_cash = client_data.get('cash', client_data.get('cashAmount', 1000))
+                total_cash = client_data.get(
+                    'cash', client_data.get('cashAmount', 1000))
 
                 # Educational portfolios for kids - distribute cash across different risk levels
                 portfolio_configs = [
-                    {'type': 'conservative', 'amount': int(total_cash * 0.5)},  # 50% conservative
-                    {'type': 'balanced', 'amount': int(total_cash * 0.3)},     # 30% balanced
-                    {'type': 'growth', 'amount': int(total_cash * 0.2)}        # 20% growth
+                    {'type': 'conservative', 'amount': int(
+                        total_cash * 0.5)},  # 50% conservative
+                    {'type': 'balanced', 'amount': int(
+                        total_cash * 0.3)},     # 30% balanced
+                    {'type': 'growth', 'amount': int(
+                        total_cash * 0.2)}        # 20% growth
                 ]
 
             portfolios_created = []
@@ -231,18 +327,22 @@ class InvesteaseClient:
                     )
                     if portfolio_result['success']:
                         portfolios_created.append(portfolio_result['data'])
-                        print(f"✅ {config['type']} portfolio created: ${config['amount']}")
+                        print(
+                            f"✅ {config['type']} portfolio created: ${config['amount']}")
                     else:
-                        print(f"❌ Failed to create {config['type']} portfolio: {portfolio_result['error']}")
+                        print(
+                            f"❌ Failed to create {config['type']} portfolio: {portfolio_result['error']}")
 
             # Step 3: Simulate portfolios
-            simulation_result = self.simulate_client_portfolios(client_id, months=12)
+            simulation_result = self.simulate_client_portfolios(
+                client_id, months=12)
             simulation_data = None
             if simulation_result['success']:
                 simulation_data = simulation_result['data']
                 print(f"✅ Portfolio simulation completed")
             else:
-                print(f"❌ Portfolio simulation failed: {simulation_result['error']}")
+                print(
+                    f"❌ Portfolio simulation failed: {simulation_result['error']}")
 
             # Step 4: Get updated client info with portfolios
             updated_client_result = self.get_client(client_id)
@@ -297,6 +397,8 @@ class InvesteaseClient:
 investease_client = InvesteaseClient()
 
 # Main function for timeline service integration
+
+
 def register_client_with_investease(client_data):
     """
     Complete Investease client creation with portfolios and simulation
