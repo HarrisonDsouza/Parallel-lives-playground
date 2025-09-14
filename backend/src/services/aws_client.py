@@ -7,6 +7,8 @@ import json
 import os
 
 AWS_API_ENDPOINT = "https://2dcq63co40.execute-api.us-east-1.amazonaws.com/dev/clients"
+last_registered_client_id = None
+
 
 def register_client_with_aws(client_data):
     """
@@ -18,6 +20,7 @@ def register_client_with_aws(client_data):
     Returns:
         dict: Response from AWS API or error information
     """
+    global last_registered_client_id
     try:
         print(f"Registering client with AWS API: {client_data['name']}")
         
@@ -61,6 +64,12 @@ def register_client_with_aws(client_data):
             try:
                 response_data = response.json()
                 print(f"AWS API Success: {response_data}")
+                
+                client_id = response_data.get("id")
+                if client_id:
+                    last_registered_client_id = client_id
+                    print(f"Saved clientId for simulation: {last_registered_client_id}")
+
                 return {
                     'success': True,
                     'data': response_data,
@@ -114,4 +123,61 @@ def register_client_with_aws(client_data):
             'success': False,
             'error': error_msg,
             'status_code': 500
+        }
+        
+def simulate_client_with_aws():
+    """
+    Trigger simulation for a given client ID.
+
+    Args:
+        client_id (str): Client UUID returned from registration
+        months (int, optional): Number of months to simulate. Default = 12.
+
+    Returns:
+        dict: API response
+    """
+    try:
+        jwt_token = os.getenv('AWS_JWT_TOKEN')
+        if not jwt_token:
+            error_msg = "AWS_JWT_TOKEN environment variable is required but not set"
+            print(error_msg)
+            return {
+                'success': False,
+                'error': error_msg,
+                'status_code': 401
+            }
+
+        url = f"https://2dcq63co40.execute-api.us-east-1.amazonaws.com/dev/client/{last_registered_client_id}/simulate"
+        headers = {
+           'Content-Type': 'application/json',
+            'Authorization': f'Bearer {jwt_token}'
+        }
+        payload = {"months": 12}
+
+        print("=== AWS SIMULATE DEBUG ===")
+        print(f"URL: {url}")
+        print(f"Headers: {headers}")
+        print(f"Payload: {json.dumps(payload, indent=2)}")
+        print("=== END DEBUG ===")
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code in (200, 201):
+            return {
+                "success": True,
+                "data": response.json(),
+                "status_code": response.status_code
+            }
+        else:
+            return {
+                "success": False,
+                "error": response.text,
+                "status_code": response.status_code
+            }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "status_code": 500
         }

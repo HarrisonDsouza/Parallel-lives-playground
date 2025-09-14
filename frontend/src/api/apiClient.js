@@ -37,3 +37,7 @@ export async function createTimelineWithRegistration(userData) {
 		.post("/timelines/create-with-registration", userData)
 		.then((r) => r.data);
 }
+
+export async function simulateClient() {
+	return api.get(`/simulate`).then((r) => r.data);
+}
