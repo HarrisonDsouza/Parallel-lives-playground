@@ -8,122 +8,93 @@ import os
 
 AWS_API_ENDPOINT = "https://2dcq63co40.execute-api.us-east-1.amazonaws.com/dev/clients"
 last_registered_client_id = None
+g_client_data = None
 
 
 def register_client_with_aws(client_data):
     """
-    Register a client with the AWS API endpoint.
+    Register a client with the AWS API endpoint and optionally create a portfolio.
     
     Args:
         client_data (dict): Client data including name, email, cashAmount, portfolios, etc.
+        portfolio_data (dict, optional): Portfolio data to create for the client immediately.
         
     Returns:
         dict: Response from AWS API or error information
     """
-    global last_registered_client_id
+    global last_registered_client_id, g_client_data
     try:
         print(f"Registering client with AWS API: {client_data['name']}")
-        
-        # Get JWT token from environment variables
+        g_client_data = client_data
+
         jwt_token = os.getenv('AWS_JWT_TOKEN')
-        
         if not jwt_token:
             error_msg = "AWS_JWT_TOKEN environment variable is required but not set"
             print(error_msg)
-            return {
-                'success': False,
-                'error': error_msg,
-                'status_code': 401
-            }
+            return {'success': False, 'error': error_msg, 'status_code': 401}
         
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': f'Bearer {jwt_token}'
         }
-        
-        print(f"=== AWS API REQUEST DEBUG ===")
+
+        # --- Client registration ---
+        print(f"=== AWS CLIENT REGISTRATION REQUEST DEBUG ===")
         print(f"URL: {AWS_API_ENDPOINT}")
         print(f"Headers: {headers}")
-        print(f"JWT Token length: {len(jwt_token)}")
-        print(f"JWT Token first 50 chars: {jwt_token[:50]}...")
         print(f"Payload: {json.dumps(client_data, indent=2)}")
         print(f"=== END DEBUG ===")
-        
-        response = requests.post(
-            AWS_API_ENDPOINT,
-            json=client_data,
-            headers=headers,
-            timeout=30
-        )
-        
+
+        response = requests.post(AWS_API_ENDPOINT, json=client_data, headers=headers, timeout=30)
         print(f"AWS API Response Status: {response.status_code}")
         print(f"Response Headers: {dict(response.headers)}")
-        
-        if response.status_code == 200 or response.status_code == 201:
-            try:
-                response_data = response.json()
-                print(f"AWS API Success: {response_data}")
-                
-                client_id = response_data.get("id")
-                if client_id:
-                    last_registered_client_id = client_id
-                    print(f"Saved clientId for simulation: {last_registered_client_id}")
 
-                return {
-                    'success': True,
-                    'data': response_data,
-                    'status_code': response.status_code
-                }
-            except json.JSONDecodeError:
-                print(f"Success response but no JSON: {response.text}")
-                return {
-                    'success': True,
-                    'data': {'message': 'Registration successful'},
-                    'status_code': response.status_code
-                }
+        if response.status_code in (200, 201):
+            response_data = response.json()
+            print(f"AWS API Success: {response_data}")
+
+            client_id = response_data.get("id")
+            if client_id:
+                last_registered_client_id = client_id
+                print(f"Saved clientId for simulation: {last_registered_client_id}")
+
+                # --- Portfolio creation ---
+                if g_client_data:
+                    portfolio_url = f"{AWS_API_ENDPOINT}/{client_id}/portfolios"
+                    
+                    portfolio_data = {
+                        "type": "balanced",
+                        "initialAmount": g_client_data.get("cashAmount", 10000),
+                        }
+                        
+                    print(f"Creating portfolio for client {client_id}: {json.dumps(portfolio_data, indent=2)}")
+                    portfolio_resp = requests.post(portfolio_url, json=portfolio_data, headers=headers, timeout=30)
+                    if portfolio_resp.status_code in (200, 201):
+                        portfolio_json = portfolio_resp.json()
+                        print(f"Portfolio creation success: {portfolio_json}")
+                        response_data['portfolio'] = portfolio_json
+                    else:
+                        print(f"Portfolio creation failed: {portfolio_resp.text}")
+            
+            return {'success': True, 'data': response_data, 'status_code': response.status_code}
+
         else:
             print(f"Error response body: {response.text}")
-            error_message = f"AWS API Error: {response.status_code}"
             try:
                 error_data = response.json()
                 error_message = error_data.get('message', error_data)
-                print(f"Parsed error data: {error_data}")
             except json.JSONDecodeError:
-                error_message = response.text or error_message
-                print(f"Could not parse error as JSON, using raw text")
-                
+                error_message = response.text
             print(f"Final error message: {error_message}")
-            return {
-                'success': False,
-                'error': error_message,
-                'status_code': response.status_code
-            }
-            
+            return {'success': False, 'error': error_message, 'status_code': response.status_code}
+
     except requests.exceptions.Timeout:
-        error_msg = "AWS API request timed out"
-        print(error_msg)
-        return {
-            'success': False,
-            'error': error_msg,
-            'status_code': 408
-        }
+        return {'success': False, 'error': "AWS API request timed out", 'status_code': 408}
     except requests.exceptions.ConnectionError:
-        error_msg = "Failed to connect to AWS API"
-        print(error_msg)
-        return {
-            'success': False,
-            'error': error_msg,
-            'status_code': 503
-        }
+        return {'success': False, 'error': "Failed to connect to AWS API", 'status_code': 503}
     except Exception as e:
-        error_msg = f"Unexpected error calling AWS API: {str(e)}"
-        print(error_msg)
-        return {
-            'success': False,
-            'error': error_msg,
-            'status_code': 500
-        }
+        return {'success': False, 'error': f"Unexpected error calling AWS API: {str(e)}", 'status_code': 500}
         
 def simulate_client_with_aws():
     """
