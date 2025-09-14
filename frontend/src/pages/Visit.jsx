@@ -3,6 +3,8 @@ import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import GameIcon, { GameIcons } from "../components/GameIcon";
+import { simulateClient } from "../api/apiClient";
+import SimulateButton from "../components/SimulateButton";
 
 const API = import.meta.env.VITE_API_BASE || "http://localhost:4000/api";
 
@@ -882,6 +884,9 @@ export default function Visit() {
 							? "Choices like these could help you save enough for that expensive gaming setup!"
 							: "Every choice is a learning experience - even tough ones teach us something valuable!"}
 					</p>
+
+					<SimulateButton id={id} setTimeline={setTimeline} />
+
 				</div>
 			</div>
 		</div>

@@ -4,16 +4,18 @@ Parallel Lives Backend - Educational Financial App for Kids
 Single Flask application entry point with proper security configuration
 """
 
+from src.routes.social import social_bp
+from src.routes.timelines import timelines_bp
+from src.config import Config
 import os
 import sys
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from src.config import Config
 
 # Validate configuration on startup
 missing_config = Config.validate_config()
@@ -34,17 +36,23 @@ CORS(app, origins=Config.CORS_ORIGINS)
 socketio = SocketIO(app, cors_allowed_origins=Config.CORS_ORIGINS)
 
 # Import routes with absolute imports
-from src.routes.timelines import timelines_bp
-from src.routes.social import social_bp
 
 # Register blueprints
 app.register_blueprint(timelines_bp, url_prefix='/api/timelines')
 app.register_blueprint(social_bp, url_prefix='/api/social')
 
+
+@app.route("/api/simulate")
+def simulate():
+    result = simulate_client_with_aws()
+    return jsonify(result), result.get("status_code", 500)
+
+
 @app.route('/health')
 def health():
     """Health check endpoint"""
     return {'ok': True, 'service': 'Educational Financial App for Kids'}
+
 
 @app.route('/')
 def root():
@@ -57,25 +65,32 @@ def root():
     }
 
 # Socket.IO events
+
+
 @socketio.on('connect')
 def handle_connect():
     print(f'Client connected')
+
 
 @socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
 
+
 @socketio.on('join-room')
 def handle_join_room(room):
     print(f'Client joined room: {room}')
+
 
 @socketio.on('spawn-timeline')
 def handle_spawn_timeline(data):
     emit('timeline-spawned', data, broadcast=True)
 
+
 @socketio.on('update-timeline')
 def handle_update_timeline(data):
     emit('timeline-updated', data, broadcast=True)
+
 
 if __name__ == '__main__':
     print("🎓 Starting Parallel Lives Educational Backend")
