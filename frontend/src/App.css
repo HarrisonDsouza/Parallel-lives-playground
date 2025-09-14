@@ -33,11 +33,12 @@ body, html, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
   gap: 1rem;
+  z-index: 10;
   box-shadow: 0 5px 15px rgba(0,0,0,0.6);
 }
 
+/* Big header only on homepage */
 .app-title {
   font-size: 2.5rem;
   color: #ffeb3b;
@@ -45,7 +46,7 @@ body, html, #root {
   margin-bottom: 1rem;
 }
 
-/* Nav */
+/* Full Nav (Homepage) */
 .app-nav {
   display: flex;
   gap: 2rem;
@@ -86,6 +87,35 @@ body, html, #root {
 
 .app-nav a:hover::after {
   transform: scaleX(1);
+}
+
+/* Small Nav (Inner pages) */
+.app-nav-small {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.app-nav-small a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.65rem; /* smaller font */
+  border: 2px solid #ffffff;
+  padding: 0.25rem 0.5rem; /* smaller padding */
+  border-radius: 3px;
+  background: rgba(0,0,0,0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.app-nav-small a:hover {
+  background: #2e7d32;
+  border-color: #ffeb3b;
+}
+
+/* Hide homepage big header on inner pages */
+.app-header h1 {
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Main content */
@@ -145,6 +175,6 @@ h1, h2, h3, h4 {
 }
 
 p, li {
-  margin-bottom: 1rem;
-  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
 }
